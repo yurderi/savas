@@ -10,12 +10,11 @@ Personally I had this problem and `savas` solved my problem.
 
 Using `savas` you can serve updates for your applications easily. All you need to create an application in `savas`, create a new release by providing the version and release notes and upload necessary files - done! Then next time the application is starting it can communicate through a simple API with savas to check for new updates and download them.
 
-### How?
-`savas` will come in 4 packages:
-- The plugin for the ProVallo CMS as the service (do host the release system yourself)
-- A cli tool to release a new update from the terminal
-- A node.js integration for easy communication with the http-service
-- A vue-electron integration to tell the user easily for new updates
+### Packages
+- `savas` itself as a plugin for the ProVallo CMS
+- `savas-cli` as cli-tool to manage releases through the tmerinal
+- `node-savas` a node.js integration to communicate with the savas http-service in node.js
+- `vue-electron-savas` a vue-electron integration as a working updater for your electron.io application
 
 # License
 MIT
