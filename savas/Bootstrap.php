@@ -3,6 +3,7 @@
 namespace savas;
 
 use Favez\Mvc\App;
+use savas\Components\ModelValidator;
 
 class Bootstrap extends \CMS\Components\Plugin\Bootstrap
 {
@@ -14,6 +15,8 @@ class Bootstrap extends \CMS\Components\Plugin\Bootstrap
         $targetPath  = App::path() . '/themes/savas';
 
         `ln -s $currentPath $targetPath`;
+
+        $this->migrateDb();
 
         return true;
     }
@@ -34,6 +37,11 @@ class Bootstrap extends \CMS\Components\Plugin\Bootstrap
     {
         $this->registerController('Savas', 'Index');
         $this->registerController('Savas', 'User');
+        $this->registerController('Savas', 'Application');
+
+        App::di()->registerShared('modelValidator', function() {
+            return new ModelValidator();
+        });
 
         App::instance()->getContainer()['notFoundHandler'] = function() {
             return function (\Slim\Http\Request $request, $response) {

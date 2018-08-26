@@ -20,7 +20,7 @@ export default {
             .then(response => response.data)
             .then(response => {
                 if (response.loggedIn === true) {
-                    console.log(me)
+
                 } else {
                     me.$router.push('/login')
                 }

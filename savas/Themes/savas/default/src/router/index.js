@@ -14,6 +14,21 @@ export default new Router({
             path: '/login',
             name: 'login',
             component: require('@/views/Login').default
+        },
+        {
+            path: '/application/list',
+            name: 'application-list',
+            component: require('@/views/application/List').default
+        },
+        {
+            path: '/application/create',
+            name: 'application-create',
+            component: require('@/views/application/Detail').default
+        },
+        {
+            path: '/application/edit/:id',
+            name: 'application-edit',
+            component: require('@/views/application/Detail').default
         }
     ]
 })

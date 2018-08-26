@@ -2,9 +2,9 @@
 
 1. Extend the config.inc.php with the following code in `config.modules`
 ```php
-'frontend' => [
+'savas' => [
     'controller' => [
-        'namespace'     => 'CMS\\Controllers\\Frontend\\',
+        'namespace'     => 'CMS\\Controllers\\Savas\\',
         'class_suffix'  => 'Controller',
         'method_suffix' => 'Action'
     ]
