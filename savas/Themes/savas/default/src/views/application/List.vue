@@ -4,14 +4,21 @@
         <v-content>
             <v-breadcrumb :items="breadcrumb"></v-breadcrumb>
 
-            <ul class="grid-controls">
-                <li>
+            <div class="grid-header">
+                <div class="search">
+                    <v-input type="text" placeholder="Filter applications..." v-model="filter" @keydown.esc="filter=''"></v-input>
+                    <span class="search-result" v-if="filter.length > 0">
+                        {{ filteredModels.length > 0 ? (filteredModels.length + ' results') : 'nothing found' }}
+                    </span>
+                </div>
+
+                <div class="grid-controls">
                     <v-button :spin="isLoading" @click="load">refresh</v-button>
-                </li>
-            </ul>
+                </div>
+            </div>
 
             <div class="application-items">
-                <div class="application-item" v-for="model in models">
+                <div class="application-item" v-for="model in filteredModels">
                     <div class="item-label">
                         {{ model.label }}
                     </div>
@@ -57,7 +64,8 @@
 export default {
     data: () => ({
         models: [],
-        isLoading: false
+        isLoading: false,
+        filter: ''
     }),
     computed: {
         breadcrumb() {
@@ -67,6 +75,9 @@ export default {
                     route: { name: 'application-list' }
                 }
             ]
+        },
+        filteredModels () {
+            return this.$models.application.filter(this.models, this.filter)
         }
     },
     mounted() {

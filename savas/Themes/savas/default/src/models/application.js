@@ -1,8 +1,8 @@
 export default {
     fields: [
         { name: 'id', type: 'integer' },
-        { name: 'label', type: 'string' },
-        { name: 'description', type: 'string' },
+        { name: 'label', type: 'string', filterable: true },
+        { name: 'description', type: 'string', filterable: true },
         { name: 'publicKey', type: 'string' },
         { name: 'privateKey', type: 'string' },
         { name: 'created', type: 'string' },

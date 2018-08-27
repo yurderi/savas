@@ -74,6 +74,20 @@ files.keys().forEach(key => {
                     return rows
                 })
         },
+        filter (models, search) {
+            let me = this
+            let fields = me.fields.filter(field => field.filterable === true)
+
+            return models.filter(model => {
+                for (let i = 0, field; i < fields.length, field = fields[i]; i++) {
+                    if (model[field.name].indexOf(search) > -1) {
+                        return true
+                    }
+                }
+
+                return false
+            })
+        },
         __normalizeRow (data) {
             let me = this
 
