@@ -62,7 +62,7 @@ export default {
         breadcrumb() {
             return [
                 {
-                    label: 'application',
+                    label: 'applications',
                     route: { name: 'application-list' }
                 },
                 {

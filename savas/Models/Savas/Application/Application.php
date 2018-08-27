@@ -27,6 +27,7 @@ class Application extends Entity
     public function initialize()
     {
         $this->hasMany(Release::class, 'appID')->setName('releases');
+        $this->hasMany(Member::class, 'appID')->setName('members');
     }
 
     public function validate()
