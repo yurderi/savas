@@ -21,6 +21,11 @@ export default new Router({
             component: require('@/views/application/List').default
         },
         {
+            path: '/application/settings',
+            name: 'application-settings',
+            component: require('@/views/application/Settings').default
+        },
+        {
             path: '/application/create',
             name: 'application-create',
             component: require('@/views/application/Detail').default
