@@ -17,4 +17,13 @@ class Channel extends Entity
 
     public $description;
 
+    public function validate()
+    {
+        return [
+            'label' => [
+                'required' => 'Please enter a label'
+            ]
+        ];
+    }
+
 }
