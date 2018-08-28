@@ -22,6 +22,11 @@
                         </li>
                     </ul>
                 </li>
+                <li>
+                    <a href="#">
+                        documentation
+                    </a>
+                </li>
                 <li @click="logout">
                     <a href="#">
                         <fa icon="sign-out-alt"></fa>
