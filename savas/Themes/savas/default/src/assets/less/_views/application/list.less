@@ -28,31 +28,31 @@
   }
   .application-items {
     display: grid;
-    grid-template: "1 2" / auto;
-    grid-gap: 10px 10px;
+    grid-gap: 1%;
+    grid-template-columns: 49.5% 49.5%;
     .application-item {
       background: #fff;
       padding: 10px;
       box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.05);
       display: grid;
-      grid-template:
-        "header info"
-        "description info"
-        "actions info"
-        / auto 150px;
+      grid-template-columns: 1fr 30%;
+      grid-template-rows: 25% 25% 25% 25%;
       .item-label {
         font-size: 18px;
-        grid-area: 1 header;
+        grid-column: 1 e("/") 2;
+        grid-row: 1 e("/") 2;
       }
       .item-description {
         padding: 5px 0;
         font-size: 12px;
         color: #999;
-        grid-area: 2 description;
+        grid-column: 1 e("/") 2;
+        grid-row: 2 e("/") 4;
       }
       .item-information {
         margin: 5px 0;
-        grid-area: 1 / info / 10;
+        grid-column: 2 e("/") 3;
+        grid-row: 1 e("/") 5;
         .information-item {
           display: flex;
           flex-direction: row;
@@ -68,7 +68,8 @@
         }
       }
       .item-actions {
-        grid-area: 3 actions;
+        grid-row: 4;
+        grid-column: 1 e("/") 2;
         a {
           font-size: 12px;
           color: #666;
