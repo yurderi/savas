@@ -38,6 +38,8 @@ class Bootstrap extends \CMS\Components\Plugin\Bootstrap
         $this->registerController('Savas', 'Index');
         $this->registerController('Savas', 'User');
         $this->registerController('Savas', 'Application');
+        $this->registerController('Savas', 'Channel');
+        $this->registerController('Savas', 'Platform');
 
         App::di()->registerShared('modelValidator', function() {
             return new ModelValidator();
