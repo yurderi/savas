@@ -8,7 +8,17 @@
                     <label for="channels">
                         Channels
                     </label>
+                    <div class="channels-editor">
+                        <div class="channel-item">
+                            <div class="item-label">
+                                stable
+                            </div>
+                            <div class="item-description">
 
+                            </div>
+                        </div>
+                        <v-button><fa icon="plus"></fa></v-button>
+                    </div>
                 </div>
                 <div class="form-item">
                     <label for="platforms">
