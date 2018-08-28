@@ -2,151 +2,58 @@
 
 namespace CMS\Controllers\Savas;
 
-use CMS\Components\Controller;
+use savas\Components\Controllers\API;
 use savas\Models\Savas\Application\Application;
 use savas\Models\Savas\Application\Member;
 
-class ApplicationController extends Controller
+class ApplicationController extends API
 {
 
-    public function preDispatch ()
+    public function configure()
     {
-        if (!self::auth()->loggedIn())
-        {
-            $this->app()->respond(self::json()->failure(['message' => 'Not logged in']));
-            die;
-        }
+        return [
+            'model' => Application::class
+        ];
     }
 
-    public function listAction ()
+    public function getListQuery()
     {
         $userID = self::auth()->userID();
-        $rows   = self::db()->from('s_application a')
+        $query  = self::db()->from('s_application a')
             ->leftJoin('s_application_member am ON am.appID = a.id')
             ->where('am.userID', $userID)
-            ->select(null)->select('a.*')
-            ->fetchAll();
+            ->select(null)->select('a.*');
 
-        return self::json()->success([
-            'data' => $rows
-        ]);
+        return $query;
     }
 
-    public function saveAction ()
+    public function checkPermission (\Favez\ORM\Entity\Entity $entity)
     {
-        $input = self::request()->getParams();
-        $id    = (int) self::request()->getParam('id');
-        $isNew = $id <= 0;
-
-        $repository = Application::repository();
-
-        if (!$isNew)
-        {
-            $model = $repository->find($id);
-
-            if (!($model instanceof Application))
-            {
-                return self::json()->failure(['message' => 'Application by id not found.']);
-            }
-
-            if (!Application::isMember($model->id))
-            {
-                return self::json()->failure(['message' => 'You are not permitted to edit this application.']);
-            }
-        }
-        else
-        {
-            /** @var Application $model */
-            $model = $repository->create();
-            $model->created    = date('Y-m-d H:i:s');
-            $model->changed    = date('Y-m-d H:i:s');
-            $model->publicKey  = md5(uniqid('publicKey'));
-            $model->privateKey = md5(uniqid('privateKey'));
-        }
-
-        $model->set('label', $input['label']);
-        $model->set('description', $input['description']);
-
-        /** @var \Savas\Components\ModelValidator $validator */
-        $validator = self::modelValidator();
-
-        if ($validator->validate($model))
-        {
-            $model->save();
-
-            if ($isNew)
-            {
-                $member = Member::create();
-                $member->appID  = $model->id;
-                $member->userID = self::auth()->userID();
-                $member->save();
-            }
-
-            return self::json()->success([
-                'data' => $model->toArray(false)
-            ]);
-        }
-
-        return self::json()->failure([
-            'messages' => $validator->getMessages()
-        ]);
+        return Application::isMember($entity->id);
     }
 
-    public function detailAction()
+    public function setDefaultValues (\Favez\ORM\Entity\Entity $entity)
     {
-        $id         = (int) self::request()->getParam('id');
-        $repository = Application::repository();
-
-        if ($id > 0)
-        {
-            $model = $repository->find($id);
-
-            if (!($model instanceof Application))
-            {
-                return self::json()->failure(['message' => 'Application by id not found.']);
-            }
-
-            if (!Application::isMember($model->id))
-            {
-                return self::json()->failure(['message' => 'You are not permitted to edit this application.']);
-            }
-
-            return self::json()->success([
-                'data' => $model->toArray(false)
-            ]);
-        }
-        else
-        {
-            return self::json()->failure(['message' => 'Missing required param: id']);
-        }
+        $entity->created    = date('Y-m-d H:i:s');
+        $entity->changed    = date('Y-m-d H:i:s');
+        $entity->publicKey  = md5(uniqid('publicKey'));
+        $entity->privateKey = md5(uniqid('privateKey'));
     }
 
-    public function removeAction ()
+    public function setValues (\Favez\ORM\Entity\Entity $entity, $input)
     {
-        $id         = (int) self::request()->getParam('id');
-        $repository = Application::repository();
+        $entity->set('label', $input['label']);
+        $entity->set('description', $input['description']);
+    }
 
-        if ($id > 0)
+    public function afterSave (\Favez\ORM\Entity\Entity $entity, $isNew)
+    {
+        if ($isNew)
         {
-            $model = $repository->find($id);
-
-            if (!($model instanceof Application))
-            {
-                return self::json()->failure(['message' => 'Application by id not found.']);
-            }
-
-            if (!Application::isMember($model->id))
-            {
-                return self::json()->failure(['message' => 'You are not permitted to edit this application.']);
-            }
-
-            $model->remove();
-
-            return self::json()->success();
-        }
-        else
-        {
-            return self::json()->failure(['message' => 'Missing required param: id']);
+            $member = Member::create();
+            $member->userID = self::auth()->userID();
+            $member->appID  = $entity->id;
+            $member->save();
         }
     }
 
