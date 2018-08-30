@@ -4,40 +4,44 @@
         <v-content>
             <v-breadcrumb :items="breadcrumb"></v-breadcrumb>
 
-            <v-message v-if="result.type !== null" :type="result.type">
-                {{ result.message }}
-            </v-message>
+            <v-tab-menu>
+                <v-tab id="detail" label="Details">
+                    <v-message v-if="result.type !== null" :type="result.type">
+                        {{ result.message }}
+                    </v-message>
 
-            <v-form v-if="model" @submit.prevent="save">
-                <div class="form-item">
-                    <label for="label">
-                        Label
-                    </label>
-                    <v-input type="text" id="label" v-model="model.label"></v-input>
-                </div>
-                <div class="form-item">
-                    <label for="description">
-                        Description
-                    </label>
-                    <v-input type="textarea" id="description" v-model="model.description"></v-input>
-                </div>
-                <div class="form-item" v-if="!isNew">
-                    <label for="publicKey">
-                        Public Key
-                    </label>
-                    <v-input type="text" id="publicKey" v-model="model.publicKey" readonly></v-input>
-                </div>
-                <div class="form-item" v-if="!isNew">
-                    <label for="privateKey">
-                        Private Key
-                    </label>
-                    <v-input type="text" id="privateKey" v-model="model.privateKey" readonly></v-input>
-                </div>
+                    <v-form v-if="model" @submit.prevent="save">
+                        <div class="form-item">
+                            <label for="label">
+                                Label
+                            </label>
+                            <v-input type="text" id="label" v-model="model.label"></v-input>
+                        </div>
+                        <div class="form-item">
+                            <label for="description">
+                                Description
+                            </label>
+                            <v-input type="textarea" id="description" v-model="model.description"></v-input>
+                        </div>
+                        <div class="form-item" v-if="!isNew">
+                            <label for="publicKey">
+                                Public Key
+                            </label>
+                            <v-input type="text" id="publicKey" v-model="model.publicKey" readonly></v-input>
+                        </div>
+                        <div class="form-item" v-if="!isNew">
+                            <label for="privateKey">
+                                Private Key
+                            </label>
+                            <v-input type="text" id="privateKey" v-model="model.privateKey" readonly></v-input>
+                        </div>
 
-                <div class="form-buttons">
-                    <v-button :spin="result.loading">Submit</v-button>
-                </div>
-            </v-form>
+                        <div class="form-buttons">
+                            <v-button :spin="result.loading">Submit</v-button>
+                        </div>
+                    </v-form>
+                </v-tab>
+            </v-tab-menu>
         </v-content>
     </div>
 </template>
