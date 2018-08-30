@@ -1,0 +1,51 @@
+.inline-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 10px;
+  margin: 10px 0 0 0;
+  .grid-actions {
+    grid-column: 1 e("/") 4;
+  }
+  .grid-item {
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 10px;
+    .item-label {
+      font-size: 16px;
+    }
+    .item-description {
+      font-size: 12px;
+      margin: 5px 0;
+      color: #999;
+    }
+    .item-actions {
+      a {
+        color: #666;
+        text-decoration: none;
+        font-size: 12px;
+        margin: 0 10px 0 0;
+        &:last-child {
+          margin: 0;
+        }
+        &:hover {
+          color: #000;
+        }
+      }
+    }
+  }
+  .modal-container.inline-grid-editor {
+    .modal {
+      .modal-title {
+        font-size: 20px;
+        padding: 10px;
+      }
+      .modal-form {
+        padding: 0 10px;
+      }
+      .modal-actions {
+        padding: 10px;
+        background: rgba(0, 0, 0, 0.1);
+      }
+    }
+  }
+}

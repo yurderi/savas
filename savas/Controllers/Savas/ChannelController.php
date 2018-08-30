@@ -2,6 +2,7 @@
 
 namespace CMS\Controllers\Savas;
 
+use Favez\ORM\Entity\Entity;
 use savas\Components\Controllers\API;
 use savas\Models\Savas\Channel;
 
@@ -26,7 +27,12 @@ class ChannelController extends API
 
     public function checkPermission (\Favez\ORM\Entity\Entity $entity)
     {
-        return $entity->userID === self::auth()->userID();
+        return (int) $entity->userID === self::auth()->userID();
+    }
+
+    public function setDefaultValues(\Favez\ORM\Entity\Entity $entity)
+    {
+        $entity->set('userID', self::auth()->userID());
     }
 
     public function setValues (\Favez\ORM\Entity\Entity $entity, $input)

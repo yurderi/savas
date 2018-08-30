@@ -23,6 +23,7 @@ Vue.component('v-content', require('@/modules/Content.vue').default)
 Vue.component('v-breadcrumb', require('@/modules/Breadcrumb.vue').default)
 Vue.component('v-form', require('@/modules/Form.vue').default)
 Vue.component('v-message', require('@/modules/Message.vue').default)
+Vue.component('v-inline-grid', require('@/modules/InlineGrid.vue').default)
 
 window.app = new Vue({
     el: '#app',

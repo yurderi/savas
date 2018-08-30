@@ -6,9 +6,9 @@ export default {
         { name: 'description', type: 'string', filterable: true },
     ],
     proxy: {
-        list: 'platform/list',
-        detail: 'platform/detail',
-        save: 'platform/save',
-        remove: 'platform/remove'
+        list: 'channel/list',
+        detail: 'channel/detail',
+        save: 'channel/save',
+        remove: 'channel/remove'
     }
 }
