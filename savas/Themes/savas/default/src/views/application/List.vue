@@ -77,7 +77,10 @@ export default {
             ]
         },
         filteredModels () {
-            return this.$models.application.filter(this.models, this.filter)
+            return this.$model.filter(this.models, this.filter)
+        },
+        $model() {
+            return this.$models.application
         }
     },
     mounted() {
@@ -90,7 +93,7 @@ export default {
             let me = this
 
             me.isLoading = true
-            me.$models.application.list()
+            me.$model.list()
                 .then(models => {
                     me.models = models
                     me.isLoading = false
@@ -103,7 +106,7 @@ export default {
         remove(model) {
             let me = this
 
-            me.$models.application.remove(model)
+            me.$model.remove(model)
                 .then(success => {
                     me.load()
                 })

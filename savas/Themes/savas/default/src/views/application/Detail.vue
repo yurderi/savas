@@ -82,6 +82,9 @@ export default {
                     active: !this.isNew && this.model !== null
                 }
             ]
+        },
+        $model() {
+            return this.$models.application
         }
     },
     watch: {
@@ -90,9 +93,9 @@ export default {
                 let me = this
 
                 if (me.isNew) {
-                    me.model = me.$models.application.create()
+                    me.model = me.$model.create()
                 } else {
-                    me.$models.application.get(this.id)
+                    me.$model.get(this.id)
                         .then(response => {
                             me.model = response
                         })
@@ -112,7 +115,7 @@ export default {
             me.result.type    = me.result.message = null
             me.result.loading = true
 
-            me.$models.application.save(me.model)
+            me.$model.save(me.model)
                 .then(response => {
                     if (response.success) {
                         me.result.type    = 'success'
