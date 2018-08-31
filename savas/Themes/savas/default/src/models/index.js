@@ -61,10 +61,10 @@ files.keys().forEach(key => {
                     return response.success
                 })
         },
-        list () {
+        list (params) {
             let me = this
 
-            return Vue.http.post(me.proxy.list)
+            return Vue.http.post(me.proxy.list, params)
                 .then(response => response.data)
                 .then(response => {
                     let rows = response.data

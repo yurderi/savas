@@ -34,13 +34,21 @@
                         </div>
                     </v-form>
                 </v-tab>
+                <v-tab id="releases" label="Releases">
+                    <v-releases-list v-if="model" :application="model"></v-releases-list>
+                </v-tab>
             </v-tab-menu>
         </v-content>
     </div>
 </template>
 
 <script>
+import VReleasesList from '@/views/releases/List'
+
 export default {
+    components: {
+        VReleasesList
+    },
     data: () => ({
         model: null,
         formButtons: [

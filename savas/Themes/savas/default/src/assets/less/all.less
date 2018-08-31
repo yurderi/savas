@@ -31,13 +31,27 @@
   font: 32px 'Inconsolata', monospace;
 }
 
+// Customize tab-menu
 .tab-menu {
-  background: #fff;
+  > ul {
+    border: 0 none;
+    background: #fff;
+    margin: 0 0 10px 0;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    li {
+      display: block;
+      border-radius: 15px;
+      span {
+        margin: 0;
+      }
+    }
+  }
   .tab-content {
     .tab-item {
-      > .form-container {
-        padding: 0;
-      }
+      padding: 0;
     }
   }
 }
@@ -52,3 +66,4 @@
 @import "_components/form";
 @import "_components/message";
 @import "_components/inline-grid";
+@import "_components/grid-header";

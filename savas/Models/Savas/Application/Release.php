@@ -31,4 +31,19 @@ class Release extends Entity
         $this->hasMany(File::class, 'releaseID')->setName('files');
     }
 
+    public function validate()
+    {
+        return [
+            'appID' => [
+                'required' => 'Please select an application'
+            ],
+            'channelID' => [
+                'required' => 'Please select a channel'
+            ],
+            'version' => [
+                'required' => 'Please enter a version'
+            ]
+        ];
+    }
+
 }

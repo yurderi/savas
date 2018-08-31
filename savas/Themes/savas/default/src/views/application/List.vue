@@ -4,18 +4,12 @@
         <v-content>
             <v-breadcrumb :items="breadcrumb"></v-breadcrumb>
 
-            <div class="grid-header">
-                <div class="search">
-                    <v-input type="text" placeholder="Filter applications..." v-model="filter" @keydown.esc="filter=''"></v-input>
-                    <span class="search-result" v-if="filter.length > 0">
-                        {{ filteredModels.length > 0 ? (filteredModels.length + ' results') : 'nothing found' }}
-                    </span>
-                </div>
-
-                <div class="grid-controls">
-                    <v-button :spin="isLoading" @click="load">refresh</v-button>
-                </div>
-            </div>
+            <v-grid-header v-model="filter"
+                           :resultCount="filteredModels.length"
+                           :buttons="gridButtons"
+                           @create="create"
+                           @refresh="load">
+            </v-grid-header>
 
             <div class="application-items">
                 <div class="application-item" v-for="model in filteredModels">
@@ -65,7 +59,18 @@ export default {
     data: () => ({
         models: [],
         isLoading: false,
-        filter: ''
+        filter: '',
+        gridButtons: [
+            {
+                name: 'create',
+                icon: 'plus'
+            },
+            {
+                label: 'refresh',
+                name: 'refresh',
+                spin: false
+            }
+        ]
     }),
     computed: {
         breadcrumb() {
@@ -92,16 +97,24 @@ export default {
         load() {
             let me = this
 
-            me.isLoading = true
+            me.gridButtons[1].spin = true
+
             me.$model.list()
                 .then(models => {
                     me.models = models
-                    me.isLoading = false
+                    me.gridButtons[1].spin = false
                 })
                 .catch(error => {
                     // ???
                     console.log(error)
                 })
+        },
+        create() {
+            let me = this
+
+            me.$router.push({
+                name: 'application-create'
+            })
         },
         remove(model) {
             let me = this
