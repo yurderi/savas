@@ -6,11 +6,8 @@
 
             <v-tab-menu>
                 <v-tab id="detail" label="Details">
-                    <v-message v-if="result.type !== null" :type="result.type">
-                        {{ result.message }}
-                    </v-message>
-
-                    <v-form v-if="model" @submit.prevent="save">
+                    <v-form v-if="model" @submit="save"
+                            :buttons="formButtons">
                         <div class="form-item">
                             <label for="label">
                                 Label
@@ -35,10 +32,6 @@
                             </label>
                             <v-input type="text" id="privateKey" v-model="model.privateKey" readonly></v-input>
                         </div>
-
-                        <div class="form-buttons">
-                            <v-button :spin="result.loading">Submit</v-button>
-                        </div>
                     </v-form>
                 </v-tab>
             </v-tab-menu>
@@ -50,11 +43,13 @@
 export default {
     data: () => ({
         model: null,
-        result: {
-            loading: false,
-            type: null,
-            message: null
-        }
+        formButtons: [
+            {
+                label: 'Submit',
+                name: 'submit',
+                primary: true
+            }
+        ]
     }),
     computed: {
         id () {
@@ -105,38 +100,33 @@ export default {
         }
     },
     methods: {
-        save () {
+        save ({ setLoading, setMessage }) {
             let me = this
 
-            if (me.result.loading === true) {
-                return
-            }
-
-            me.result.type    = me.result.message = null
-            me.result.loading = true
+            setMessage(null)
+            setLoading(true)
 
             me.$model.save(me.model)
                 .then(response => {
                     if (response.success) {
-                        me.result.type    = 'success'
-                        me.result.message = 'The application were saved successfully'
+                        setMessage('success', 'The application were saved successfully')
 
                         if (me.isNew) {
                             me.$router.push({ name: 'application-edit', params: { id: response.data.id }})
                         }
                     } else {
-                        me.result.type    = 'error'
-                        me.result.message = typeof response.messages === 'object'
+                        let error = typeof response.messages === 'object'
                             ? response.messages.join('<br />')
                             : response.message
+
+                        setMessage('error', error)
                     }
                 })
                 .catch(error => {
-                    me.result.type    = 'error'
-                    me.result.message = 'Unable to save the application. See console for more information.'
+                    setMessage('error', error)
                 })
                 .finally(() => {
-                    me.result.loading = false
+                    setLoading(false)
                 })
         }
     }

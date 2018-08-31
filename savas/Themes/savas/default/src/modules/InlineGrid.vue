@@ -29,13 +29,9 @@
                     Edit {{ config.label }}
                 </template>
             </div>
-            <div class="modal-form">
+            <v-form @submit="submit" @abort="abort" :buttons="formButtons">
                 <slot name="form" :model="editingModel"></slot>
-            </div>
-            <div class="modal-actions">
-                <v-button @click="submit" :spin="isSaving">submit</v-button>
-                <v-button @click="abort" :disabled="isSaving">abort</v-button>
-            </div>
+            </v-form>
         </v-modal>
     </div>
 </template>
@@ -57,7 +53,18 @@ export default {
         models: [],
         editingModel: null,
         isSaving: false,
-        isLoading: false
+        isLoading: false,
+        formButtons: [
+            {
+                label: 'Submit',
+                name: 'submit',
+                primary: true
+            },
+            {
+                label: 'Abort',
+                name: 'abort'
+            }
+        ]
     }),
     computed: {
         $model() {
@@ -99,20 +106,24 @@ export default {
 
             me.$model.remove(model).then(me.load)
         },
-        submit() {
+        submit({ setLoading, setMessage }) {
             let me = this
+
+            setMessage(null)
+            setLoading(true)
 
             me.isSaving = true
             me.$model.save(me.editingModel)
                 .then(() => {
                     me.load()
+
+                    me.editingModel = null
                 })
                 .catch(error => {
-                    console.log(error)
+                    setMessage('error', error)
                 })
                 .finally(() => {
-                    me.isSaving = false
-                    me.editingModel = null
+                    setLoading(false)
                 })
         },
         abort() {
