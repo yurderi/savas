@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import VReleasesList from '@/views/releases/List'
+import VReleasesList from '@/views/release/List'
 
 export default {
     components: {

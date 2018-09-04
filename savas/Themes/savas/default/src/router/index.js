@@ -31,9 +31,19 @@ export default new Router({
             component: require('@/views/application/Detail').default
         },
         {
-            path: '/application/edit/:id',
+            path: '/application/:id',
             name: 'application-edit',
             component: require('@/views/application/Detail').default
+        },
+        {
+            path: '/application/:applicationID/release/create',
+            name: 'release-create',
+            component: require('@/views/release/Detail').default
+        },
+        {
+            path: '/application/:applicationID/release/:id',
+            name: 'release-edit',
+            component: require('@/views/release/Detail').default
         }
     ]
 })

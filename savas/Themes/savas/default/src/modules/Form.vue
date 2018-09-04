@@ -1,8 +1,6 @@
 <template>
     <div class="form-container">
-        <v-message v-if="message.type" :type="message.type">
-            {{ message.text }}
-        </v-message>
+        <v-message v-if="message.type" :type="message.type" v-html="message.text"></v-message>
 
         <form @submit.prevent="submit">
             <slot></slot>
