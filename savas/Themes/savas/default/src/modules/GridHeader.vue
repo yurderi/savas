@@ -51,7 +51,7 @@ export default {
         click (button) {
             let me = this
 
-            me.$emit(button.name)
+            me.$emit('click', button.action)
         }
     }
 }

@@ -1,0 +1,17 @@
+.grid {
+  .grid-items {
+    display: grid;
+    grid-gap: 10px;
+    &.column-1 { grid-template-columns: 1fr; }
+    &.column-2 { grid-template-columns: 1fr 1fr; }
+    &.column-3 { grid-template-columns: 1fr 1fr 1fr; }
+    &.column-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+    &.column-5 { grid-template-columns: 1fr 1fr 1fr 1fr 1fr; }
+    &.column-6 { grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr; }
+    .grid-item {
+      background: #fff;
+      padding: 10px;
+      box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.05);
+    }
+  }
+}

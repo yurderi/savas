@@ -1,59 +1,51 @@
 .is--application-list {
-  .application-items {
+  .grid-item.application {
     display: grid;
-    grid-gap: 1%;
-    grid-template-columns: 49.5% 49.5%;
-    .application-item {
-      background: #fff;
-      padding: 10px;
-      box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.05);
-      display: grid;
-      grid-template-columns: 1fr 30%;
-      grid-template-rows: 25% 25% 25% 25%;
-      .item-label {
-        font-size: 18px;
-        grid-column: 1 e("/") 2;
-        grid-row: 1 e("/") 2;
-      }
-      .item-description {
-        padding: 5px 0;
-        font-size: 12px;
-        color: #999;
-        grid-column: 1 e("/") 2;
-        grid-row: 2 e("/") 4;
-      }
-      .item-information {
-        margin: 5px 0;
-        grid-column: 2 e("/") 3;
-        grid-row: 1 e("/") 5;
-        .information-item {
-          display: flex;
-          flex-direction: row;
-          .item-label {
-            font-size: 12px;
-            color: #999;
-            width: 65px;
-          }
-          .item-value {
-            font-size: 12px;
-            color: #333;
-          }
+    grid-template-columns: 1fr 30%;
+    grid-template-rows: 25% 25% 25% 25%;
+    .item-label {
+      font-size: 18px;
+      grid-column: 1 e("/") 2;
+      grid-row: 1 e("/") 2;
+    }
+    .item-description {
+      padding: 5px 0;
+      font-size: 12px;
+      color: #999;
+      grid-column: 1 e("/") 2;
+      grid-row: 2 e("/") 4;
+    }
+    .item-information {
+      margin: 5px 0;
+      grid-column: 2 e("/") 3;
+      grid-row: 1 e("/") 5;
+      .information-item {
+        display: flex;
+        flex-direction: row;
+        .item-label {
+          font-size: 12px;
+          color: #999;
+          width: 65px;
+        }
+        .item-value {
+          font-size: 12px;
+          color: #333;
         }
       }
-      .item-actions {
-        grid-row: 4;
-        grid-column: 1 e("/") 2;
-        a {
-          font-size: 12px;
-          color: #666;
-          text-decoration: none;
-          margin: 0 10px 0 0;
-          &:hover {
-            color: #000;
-          }
-          &:last-child {
-            margin: 0;
-          }
+    }
+    .item-actions {
+      grid-row: 4;
+      grid-column: 1 e("/") 2;
+      a {
+        font-size: 12px;
+        color: #666;
+        text-decoration: none;
+        margin: 0 10px 0 0;
+        &:hover {
+          color: #000;
+        }
+        &:last-child {
+          margin: 0;
         }
       }
     }

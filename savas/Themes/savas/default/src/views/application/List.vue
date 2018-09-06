@@ -4,15 +4,8 @@
         <v-content>
             <v-breadcrumb :items="breadcrumb"></v-breadcrumb>
 
-            <v-grid-header v-model="filter"
-                           :resultCount="filteredModels.length"
-                           :buttons="gridButtons"
-                           @create="create"
-                           @refresh="load">
-            </v-grid-header>
-
-            <div class="application-items">
-                <div class="application-item" v-for="model in filteredModels">
+            <v-grid ref="grid" :config="gridConfig" @create="create">
+                <div class="grid-item application" slot="item" slot-scope="{ model }">
                     <div class="item-label">
                         {{ model.label }}
                     </div>
@@ -38,40 +31,31 @@
                         </div>
                     </div>
                     <div class="item-actions">
-                        <router-link :to="{ name: 'application-edit', params: { id: model.id } }">
+                        <a href="#" @click.prevent="edit(model)">
                             <fa icon="pencil-alt"></fa>
                             edit
-                        </router-link>
+                        </a>
                         <a href="#" @click.prevent="remove(model)">
                             <fa icon="trash"></fa>
                             remove
                         </a>
                     </div>
                 </div>
-            </div>
-
+            </v-grid>
         </v-content>
     </div>
 </template>
 
 <script>
 export default {
-    data: () => ({
-        models: [],
-        isLoading: false,
-        filter: '',
-        gridButtons: [
-            {
-                name: 'create',
-                icon: 'plus'
-            },
-            {
-                label: 'refresh',
-                name: 'refresh',
-                spin: false
+    data() {
+        return {
+            gridConfig: {
+                model: this.$models.application,
+                columns: 2,
             }
-        ]
-    }),
+        }
+    },
     computed: {
         breadcrumb() {
             return [
@@ -81,34 +65,14 @@ export default {
                 }
             ]
         },
-        filteredModels () {
-            return this.$model.filter(this.models, this.filter)
-        },
         $model() {
             return this.$models.application
+        },
+        $grid() {
+            return this.$refs.grid
         }
     },
-    mounted() {
-        let me = this
-
-        me.load()
-    },
     methods: {
-        load() {
-            let me = this
-
-            me.gridButtons[1].spin = true
-
-            me.$model.list()
-                .then(models => {
-                    me.models = models
-                    me.gridButtons[1].spin = false
-                })
-                .catch(error => {
-                    // ???
-                    console.log(error)
-                })
-        },
         create() {
             let me = this
 
@@ -116,12 +80,22 @@ export default {
                 name: 'application-create'
             })
         },
+        edit (model) {
+            let me = this
+
+            me.$router.push({
+                name: 'application-edit',
+                params: {
+                    id: model.id
+                }
+            })
+        },
         remove(model) {
             let me = this
 
             me.$model.remove(model)
                 .then(success => {
-                    me.load()
+                    me.$grid.load()
                 })
         }
     }

@@ -1,13 +1,7 @@
 <template>
     <div class="is--release-list">
-        <v-grid-header :buttons="gridButtons"
-                       @create="create" @refresh="load"
-                       v-model="filter" :resultCount="models.length">
-
-        </v-grid-header>
-
-        <div class="release-items">
-            <div class="release-item" v-for="model in models">
+        <v-grid ref="grid" :config="gridConfig" @create="create" @load="load">
+            <div class="grid-item release" slot="item" slot-scope="{ model }">
                 <div class="item-label">
                     {{ model.version }}
                 </div>
@@ -26,7 +20,7 @@
                     </a>
                 </div>
             </div>
-        </div>
+        </v-grid>
     </div>
 </template>
 
@@ -34,22 +28,18 @@
 import async from 'async'
 
 export default {
-    data: () => ({
-        models: [],
-        channels: [],
-        filter: '',
-        gridButtons: [
-            {
-                name: 'create',
-                icon: 'plus'
-            },
-            {
-                label: 'refresh',
-                name: 'refresh',
-                spin: false
+    data() {
+        return {
+            channels: [],
+            gridConfig: {
+                model: this.$models.release,
+                columns: 2,
+                fetchParams: () => ({
+                    applicationID: this.application.id
+                })
             }
-        ]
-    }),
+        }
+    },
     props: {
         application: {
             type: Object,
@@ -67,32 +57,13 @@ export default {
     mounted() {
         let me = this
 
-        me.load()
+
     },
     methods: {
-        load() {
+        load () {
             let me = this
 
-            me.gridButtons[1].spin = true
-
-            async.series([
-                (done) => {
-                    me.$channel.list()
-                        .then(channels => me.channels = channels)
-                        .finally(() => {
-                            done(null)
-                        })
-                },
-                (done) => {
-                    me.$model.list({ applicationID: me.application.id })
-                        .then(models => me.models = models)
-                        .finally(() => {
-                            done(null)
-                        })
-                }
-            ], () => {
-                me.gridButtons[1].spin = false
-            })
+            me.$channel.list().then(channels => me.channels = channels)
         },
         create () {
             let me = this
@@ -120,13 +91,13 @@ export default {
 
             me.$model.remove(model)
                 .then(() => {
-                    me.load()
+                    me.$grid.load()
                 })
         },
         _channel (id) {
             let me = this
 
-            return me.channels.find(channel => channel.id === id)
+            return me.channels.find(channel => channel.id === id) || me.$channel.create()
         }
     }
 }

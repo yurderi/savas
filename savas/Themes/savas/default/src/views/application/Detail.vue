@@ -6,8 +6,7 @@
 
             <v-tab-menu>
                 <v-tab id="detail" label="Details">
-                    <v-form v-if="model" @submit="save"
-                            :buttons="formButtons">
+                    <v-form v-if="model" @submit="save" :buttons="formButtons">
                         <div class="form-item">
                             <label for="label">
                                 Label
