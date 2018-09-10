@@ -22,10 +22,10 @@ import _ from 'lodash'
 export default {
     data: () => ({
         opts: {
-            label: ''
+            label: '',
+            override: {}
         },
         editingModel: null,
-        isSaving: false,
         isLoading: false,
         formButtons: [
             {
@@ -62,14 +62,22 @@ export default {
         submit({ setLoading, setMessage }) {
             let me = this
 
+            if (typeof me.opts.override.submit === 'function') {
+                me.opts.override.submit({ setLoading, setMessage })
+                return
+            }
+
             setMessage(null)
             setLoading(true)
 
-            me.isSaving = true
             me.$model.save(me.editingModel)
-                .then(() => {
-                    me.$emit('save')
-                    me.editingModel = null
+                .then(response => {
+                    if (response.success) {
+                        me.$emit('save')
+                        me.editingModel = null
+                    } else {
+                        setMessage('error', response.messages.join('<br />'))
+                    }
                 })
                 .catch(error => {
                     setMessage('error', error)

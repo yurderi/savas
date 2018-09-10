@@ -46,7 +46,7 @@ abstract class API extends Controller
         ]);
     }
 
-    final public function saveAction ()
+    public function saveAction ()
     {
         $input = self::request()->getParams();
         $id    = (int) self::request()->getParam('id');

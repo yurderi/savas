@@ -4,35 +4,46 @@
         <v-content>
             <v-breadcrumb :items="breadcrumb"></v-breadcrumb>
 
-            <v-form v-if="model" @submit="save"
-                    :buttons="formButtons">
-                <div class="form-item">
-                    <label for="channel">
-                        Channel
-                    </label>
-                    <v-select :data="channels" v-model="model.channelID"></v-select>
-                </div>
-                <div class="form-item">
-                    <label for="version">
-                        Version
-                    </label>
-                    <v-input type="text" id="version" v-model="model.version"></v-input>
-                </div>
-                <div class="form-item">
-                    <label for="description">
-                        Description
-                    </label>
-                    <v-input type="textarea" id="description" v-model="model.description"></v-input>
-                </div>
-            </v-form>
+            <v-tab-menu>
+                <v-tab id="form" label="Details">
+                    <v-form v-if="model" @submit="save"
+                            :buttons="formButtons">
+                        <div class="form-item">
+                            <label for="channel">
+                                Channel
+                            </label>
+                            <v-select :data="channels" v-model="model.channelID"></v-select>
+                        </div>
+                        <div class="form-item">
+                            <label for="version">
+                                Version
+                            </label>
+                            <v-input type="text" id="version" v-model="model.version"></v-input>
+                        </div>
+                        <div class="form-item">
+                            <label for="description">
+                                Description
+                            </label>
+                            <v-input type="textarea" id="description" v-model="model.description"></v-input>
+                        </div>
+                    </v-form>
+                </v-tab>
+                <v-tab id="files" label="Files" v-if="application && model && !isNew">
+                    <v-file-grid :application="application" :release="model"></v-file-grid>
+                </v-tab>
+            </v-tab-menu>
         </v-content>
     </div>
 </template>
 
 <script>
 import async from 'async'
+import VFileGrid from '@/views/file/Grid'
 
 export default {
+    components: {
+        VFileGrid
+    },
     data: () => ({
         application: null,
         model: null,

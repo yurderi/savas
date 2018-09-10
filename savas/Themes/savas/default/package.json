@@ -10,9 +10,10 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "@yurderi/vue-ui": "^1.2.0",
+    "@yurderi/vue-ui": "^1.2.1",
     "async": "^2.6.1",
     "axios": "^0.18.0",
+    "bytes": "^3.0.0",
     "less": "^3.8.1",
     "less-loader": "^4.1.0",
     "lodash": "^4.17.10",
