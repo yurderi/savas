@@ -14,8 +14,12 @@
             </v-button>
         </div>
 
-        <div class="loading-container" :class="{ 'is--hidden': !loading }">
-            <fa icon="spinner" spin></fa>
+        <div class="loading-container" :class="{ 'is--hidden': !loading && progress.value === null }">
+            <fa icon="spinner" spin v-if="loading"></fa>
+
+            <div class="loading-progress">
+                <v-progress :value="progress.value" :text="progress.text"></v-progress>
+            </div>
         </div>
     </div>
 </template>
@@ -34,6 +38,10 @@ export default {
         loading: false,
         message: {
             type: null,
+            text: ''
+        },
+        progress: {
+            value: null,
             text: ''
         }
     }),
@@ -55,6 +63,10 @@ export default {
                 },
                 setLoading (loading) {
                     me.loading = loading
+                },
+                setProgress (progress, text) {
+                    me.progress.value = progress
+                    me.progress.text  = text
                 }
             }
 

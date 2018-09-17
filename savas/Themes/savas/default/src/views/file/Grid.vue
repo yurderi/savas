@@ -8,13 +8,13 @@
                 <div class="item-label">
                     {{ model.originalFilename }}
                 </div>
-                <div class="item-size">
-                    {{ bytes(model.size, { unitSeparator: ' ' }) }}
-                </div>
-                <div class="item-platform">
-                    <span>
+                <div class="item-meta">
+                    <div class="meta-item">
                         {{ platform(model.platformID).label }}
-                    </span>
+                    </div>
+                    <div class="meta-item">
+                        {{ bytes(model.size, { unitSeparator: ' ' }) }}
+                    </div>
                 </div>
                 <div class="item-actions">
                     <a href="#" @click.prevent="edit(model)">
@@ -61,7 +61,7 @@ export default {
             bytes,
             gridConfig: {
                 model: this.$models.file,
-                columns: 5
+                columns: 4
             },
             formConfig: {
                 label: 'file',
@@ -116,7 +116,7 @@ export default {
                 me.$platform.list().then(platforms => me.platforms = platforms)
             }
         },
-        submit ({ setLoading, setMessage }) {
+        submit ({ setLoading, setMessage, setProgress }) {
             let me = this
             let $form = me.$form
             let model = $form.editingModel
@@ -125,7 +125,7 @@ export default {
                 onUploadProgress: function(progressEvent) {
                     let percentCompleted = Math.round( (progressEvent.loaded * 100) / progressEvent.total );
 
-                    console.log(percentCompleted)
+                    setProgress(percentCompleted, 'Progressing... ' + percentCompleted + '%')
                 }
             }
 
@@ -138,7 +138,7 @@ export default {
             data.append('file', me.$refs.file.$refs.fileInput.files[0])
 
             setMessage(null)
-            setLoading(true)
+            setProgress(0, 'Progressing...')
 
             me.$http.post('file/save', data, config)
                 .then(response => response.data)
@@ -147,14 +147,19 @@ export default {
                         $form.$emit('save')
                         $form.editingModel = null
                     } else {
-                        setMessage('error', response.messages.join('<br />'))
+                        throw response.messages.join('<br />')
                     }
                 })
                 .catch(error => {
-                    setMessage('error', error)
+                    if (error instanceof Error) {
+                        setMessage('error', error.message)
+                    } else {
+                        setMessage('error', error)
+                    }
                 })
                 .finally(() => {
                     setLoading(false)
+                    setProgress(null)
                 })
         },
         platform (id) {

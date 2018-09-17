@@ -59,11 +59,11 @@ export default {
         me.opts = _.extend(me.opts, me.config)
     },
     methods: {
-        submit({ setLoading, setMessage }) {
+        submit({ setLoading, setMessage, setProgress }) {
             let me = this
 
             if (typeof me.opts.override.submit === 'function') {
-                me.opts.override.submit({ setLoading, setMessage })
+                me.opts.override.submit({ setLoading, setMessage, setProgress })
                 return
             }
 
