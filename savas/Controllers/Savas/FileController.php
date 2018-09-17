@@ -3,6 +3,7 @@
 namespace CMS\Controllers\Savas;
 
 use Favez\ORM\Entity\Entity;
+use Favez\ORM\Entity\Repository;
 use savas\Components\Controllers\API;
 use savas\Models\Savas\Application\File;
 use Slim\Http\UploadedFile;
@@ -44,6 +45,50 @@ class FileController extends API
 
             $entity->filename = $name;
             $entity->size     = $file->getSize();
+        }
+    }
+
+    public function downloadAction()
+    {
+        $id = (int) self::request()->getParam('id');
+
+        /** @var Repository $repository */
+        $repository = $this->getClass()::repository();
+        $className  = $this->getClass();
+
+        if ($id > 0)
+        {
+            $model = $repository->find($id);
+
+            if (!($model instanceof $className))
+            {
+                return self::json()->failure(['message' => 'Entity by id not found.']);
+            }
+
+            if (!$this->checkPermission($model))
+            {
+                return self::json()->failure(['message' => 'You are not permitted to edit this entity.']);
+            }
+
+            $filename = self::path() . 'media/savas/' . $model->filename;
+
+            if (is_file($filename))
+            {
+                $extension = pathinfo($model->originalFilename, PATHINFO_EXTENSION);
+                $type      = \Hoa\Mime\Mime::getMimeFromExtension($extension);
+
+                header('Content-Type: ' . $type);
+                readfile($filename);
+                die;
+            }
+            else
+            {
+                return self::json()->failure(['message' => 'File not found.']);
+            }
+        }
+        else
+        {
+            return self::json()->failure(['message' => 'Missing required param: id']);
         }
     }
 

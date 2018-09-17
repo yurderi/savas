@@ -17,6 +17,9 @@
                     </div>
                 </div>
                 <div class="item-actions">
+                    <a href="#" @click.prevent="download(model)">
+                        <fa icon="download"></fa>
+                    </a>
                     <a href="#" @click.prevent="edit(model)">
                         <fa icon="pencil-alt"></fa>
                     </a>
@@ -93,6 +96,12 @@ export default {
 
             me.$form.startEdit()
             me.$form.editingModel.releaseID = me.release.id
+        },
+        download (model) {
+            let me = this
+            let url = me.$http.defaults.baseURL + '/file/download?id=' + model.id + '&filename=' + model.originalFilename
+
+            window.open(url, '_blank')
         },
         edit(model) {
             let me = this

@@ -35,6 +35,8 @@ class Bootstrap extends \CMS\Components\Plugin\Bootstrap
 
     public function execute()
     {
+        require_once $this->getPath() . '/vendor/autoload.php';
+
         $this->registerController('Savas', 'Index');
         $this->registerController('Savas', 'User');
         $this->registerController('Savas', 'Application');
