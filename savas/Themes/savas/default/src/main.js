@@ -16,6 +16,9 @@ Vue.http = Vue.prototype.$http = axios.create({
     baseURL: 'savas'
 })
 
+Vue.prototype.$moment = require('moment')
+Vue.prototype.$md     = require('markdown-it')()
+
 Vue.models = Vue.prototype.$models = models
 
 Vue.component('v-header', require('@/modules/Header.vue').default)

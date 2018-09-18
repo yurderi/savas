@@ -23,9 +23,12 @@ class ReleaseController extends API
         $query  = self::db()->from('s_application a')
             ->leftJoin('s_application_member am ON am.appID = a.id')
             ->innerJoin('s_application_release ar ON ar.appID = a.id')
+            ->leftJoin('s_application_release_file arf ON arf.releaseID = ar.id')
             ->where('am.userID', $userID)
             ->where('a.id', $appID)
-            ->select(null)->select('ar.*');
+            ->select(null)->select('ar.*, COUNT(arf.id) AS files')
+            ->orderBy('ar.version DESC')
+            ->groupBy('ar.id');
 
         return $query;
     }

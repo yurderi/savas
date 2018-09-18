@@ -3,13 +3,24 @@
         <v-grid ref="grid" :config="gridConfig" @create="create" @load="load">
             <div class="grid-item release" slot="item" slot-scope="{ model }">
                 <div class="item-label">
-                    {{ model.version }}
+                    v{{ model.version }}
                 </div>
-                <div class="item-description">
-                    {{ model.description }}
-                </div>
-                <div class="item-channel">
-                    {{ _channel(model.channelID).label }}
+                <div class="item-description" v-html="$md.render(model.description)"></div>
+                <div class="item-meta">
+                    <div class="meta-item">
+                        <fa icon="clock"></fa>
+                        {{ $moment(model.created).fromNow() }}
+                        &CenterDot;
+                        {{ $moment(model.created).format('DD.MM.YYYY') }}
+                    </div>
+                    <div class="meta-item">
+                        <fa icon="tag"></fa>
+                        {{ _channel(model.channelID).label }}
+                    </div>
+                    <div class="meta-item" v-if="model.files > 0">
+                        <fa icon="file"></fa>
+                        {{ model.files }}
+                    </div>
                 </div>
                 <div class="item-actions">
                     <a href="#" @click.prevent="edit(model)">
@@ -33,7 +44,7 @@ export default {
             channels: [],
             gridConfig: {
                 model: this.$models.release,
-                columns: 2,
+                columns: 1,
                 fetchParams: () => ({
                     applicationID: this.application.id
                 })

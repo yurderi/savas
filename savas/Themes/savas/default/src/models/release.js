@@ -7,6 +7,9 @@ export default {
         { name: 'description', type: 'string', filterable: true },
         { name: 'created', type: 'string' },
         { name: 'changed', type: 'string' },
+
+        // Additional columns
+        { name: 'files', type: 'integer '}
     ],
     proxy: {
         list: 'release/list',
