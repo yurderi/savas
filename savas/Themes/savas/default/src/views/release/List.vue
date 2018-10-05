@@ -63,6 +63,9 @@ export default {
         },
         $channel() {
             return this.$models.channel
+        },
+        $grid() {
+            return this.$refs.grid
         }
     },
     mounted() {

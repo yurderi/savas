@@ -57,4 +57,15 @@ class ApplicationController extends API
         }
     }
 
+    public function checkLabelAction ()
+    {
+        $id    = self::request()->getParam('id');
+        $label = self::request()->getParam('label');
+
+        return self::json()->success([
+            'success' => true,
+            'used'    => !Application::isUniqueLabel($id, $label)
+        ]);
+    }
+
 }

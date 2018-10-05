@@ -11,7 +11,7 @@
                             <label for="label">
                                 Label
                             </label>
-                            <v-input type="text" id="label" v-model="model.label"></v-input>
+                            <v-input type="text" id="label" v-model="model.label" @validate="validateLabel"></v-input>
                         </div>
                         <div class="form-item">
                             <label for="description">
@@ -134,6 +134,25 @@ export default {
                 })
                 .finally(() => {
                     setLoading(false)
+                })
+        },
+        validateLabel ({ ok, fail, spin, clear }) {
+            let me = this
+
+            spin()
+
+            me.$http.get('application/checkLabel', { params: me.model })
+                .then(response => response.data)
+                .then(response => {
+                    if (response.used === true) {
+                        fail('The application name is already used by another user.')
+                    } else {
+                        ok()
+                    }
+                })
+                .catch(error => {
+                    fail('API not available')
+                    throw error
                 })
         }
     }

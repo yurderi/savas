@@ -5,7 +5,9 @@ namespace CMS\Controllers\Savas;
 use Favez\ORM\Entity\Entity;
 use Favez\ORM\Entity\Repository;
 use savas\Components\Controllers\API;
+use savas\Models\Savas\Application\Application;
 use savas\Models\Savas\Application\File;
+use savas\Models\Savas\Application\Release;
 use Slim\Http\UploadedFile;
 
 class FileController extends API
@@ -46,6 +48,19 @@ class FileController extends API
             $entity->filename = $name;
             $entity->size     = $file->getSize();
         }
+    }
+
+    protected function checkPermission(Entity $entity)
+    {
+        $releaseID = $entity->releaseID;
+        $release   = Release::repository()->find($releaseID);
+
+        if ($release)
+        {
+            return Application::isMember($release->appID);
+        }
+
+        return true;
     }
 
     public function downloadAction()
