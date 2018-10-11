@@ -7,7 +7,6 @@ Yet another package manager.
 - HTTP/HTTPS Protocol  
 - Serves all type of packages  
 - Usability as good as functionality  
-- Infinite group nesting  
 - Minimalistic  
   
 Below you will find the idea/definition of the project before it was developed.  
