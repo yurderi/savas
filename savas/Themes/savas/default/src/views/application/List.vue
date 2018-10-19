@@ -15,19 +15,19 @@
                     <div class="item-information">
                         <div class="information-item">
                             <div class="item-label">version</div>
-                            <div class="item-value">1.0.0</div>
+                            <div class="item-value">{{ model.currentVersion }}</div>
                         </div>
                         <div class="information-item">
                             <div class="item-label">releases</div>
-                            <div class="item-value">1</div>
+                            <div class="item-value">{{ model.releaseCount }}</div>
                         </div>
                         <div class="information-item">
                             <div class="item-label">downloads</div>
-                            <div class="item-value">0</div>
+                            <div class="item-value">{{ model.downloadCount }}</div>
                         </div>
                         <div class="information-item">
                             <div class="item-label">feedback</div>
-                            <div class="item-value">0</div>
+                            <div class="item-value">{{ model.feedbackCount }}</div>
                         </div>
                     </div>
                     <div class="item-actions">

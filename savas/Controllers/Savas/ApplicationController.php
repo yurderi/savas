@@ -22,7 +22,19 @@ class ApplicationController extends API
         $query  = self::db()->from('s_application a')
             ->leftJoin('s_application_member am ON am.appID = a.id')
             ->where('am.userID', $userID)
-            ->select(null)->select('a.*');
+            ->select(null)->select('a.*')
+            // For current version
+            ->join('s_channel c ON c.userID = am.userID AND main = 1')
+            ->join('s_application_release ar ON ar.appID = a.id AND ar.channelID = c.id')
+            ->select('ar.version AS currentVersion')
+            // For release count
+            ->join('s_application_release ar2 ON ar.appID = a.id')
+            ->select('COUNT(ar.id) AS releaseCount')
+            ->groupBy('ar.id')
+            // For downloadCount
+            ->select('0 AS downloadCount')
+            // For feedbackCount
+            ->select('0 AS feedbackCount');
 
         return $query;
     }
