@@ -83,11 +83,13 @@ class ApiController extends Controller
                     }
 
                     return self::json()->success([
-                        'version'  => $release['version'],
-                        'released' => $release['created'],
-                        'size'     => $file->size,
-                        'filename' => self::url('savas/api/download/' . $file->displayName . '?id=' . $file->filename),
-                        'isNewer'  => true
+                        'version'      => $release['version'],
+                        'released'     => $release['created'],
+                        'size'         => $file->size,
+                        'releaseNotes' => $release['description'],
+                        'filename'     => self::url('savas/api/download/' . $file->displayName . '?id=' . $file->filename),
+
+                        'isNewer'      => true
                     ]);
                 }
             }
