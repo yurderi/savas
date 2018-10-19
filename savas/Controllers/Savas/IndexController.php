@@ -20,4 +20,9 @@ class IndexController extends Controller
         return $html;
     }
 
+    public function notFoundAction()
+    {
+        return '404 Not Found';
+    }
+
 }
