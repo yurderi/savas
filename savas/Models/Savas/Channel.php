@@ -15,7 +15,9 @@ class Channel extends Entity
 
     public $label;
 
-    public $description;
+    public $short;
+
+    public $main;
 
     public function validate()
     {

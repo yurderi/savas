@@ -7,6 +7,10 @@
                 </div>
                 <div class="item-description" v-html="$md.render(model.description)"></div>
                 <div class="item-meta">
+                    <div class="meta-item" v-if="model.active">
+                        <fa icon="check"></fa>
+                        public
+                    </div>
                     <div class="meta-item">
                         <fa icon="clock"></fa>
                         {{ $moment(model.created).fromNow() }}

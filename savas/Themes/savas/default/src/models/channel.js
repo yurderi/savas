@@ -3,7 +3,8 @@ export default {
         { name: 'id', type: 'integer' },
         { name: 'userID', type: 'integer' },
         { name: 'label', type: 'string', filterable: true },
-        { name: 'description', type: 'string', filterable: true },
+        { name: 'short', type: 'string', filterable: true },
+        { name: 'main', type: 'boolean' },
     ],
     proxy: {
         list: 'channel/list',

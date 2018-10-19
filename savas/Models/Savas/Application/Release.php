@@ -17,6 +17,8 @@ class Release extends Entity
 
     public $channelID;
 
+    public $active;
+
     public $version;
 
     public $description;

@@ -22,16 +22,18 @@ class FileController extends API
 
     protected function setDefaultValues(Entity $entity)
     {
-        $entity->created = date('Y-m-d H:i:s');
-        $entity->size    = 0;
+        $entity->created   = date('Y-m-d H:i:s');
+        $entity->size      = 0;
+        $entity->extension = '';
+        $entity->mimeType  = '';
     }
 
     protected function setValues(Entity $entity, $input)
     {
-        $entity->releaseID        = $input['releaseID'];
-        $entity->platformID       = $input['platformID'];
-        $entity->originalFilename = $input['originalFilename']; // . '_' . md5($input['filename'] . uniqid());
-        $entity->changed          = date('Y-m-d H:i:s');
+        $entity->releaseID   = $input['releaseID'];
+        $entity->platformID  = $input['platformID'];
+        $entity->displayName = $input['displayName'];
+        $entity->changed     = date('Y-m-d H:i:s');
 
         $files = self::request()->getUploadedFiles();
 
@@ -45,8 +47,10 @@ class FileController extends API
 
             $file->moveTo($filename);
 
-            $entity->filename = $name;
-            $entity->size     = $file->getSize();
+            $entity->filename  = $name;
+            $entity->size      = $file->getSize();
+            $entity->extension = pathinfo($entity->displayName, PATHINFO_EXTENSION);
+            $entity->mimeType  = \Hoa\Mime\Mime::getMimeFromExtension($entity->extension);
         }
     }
 
@@ -89,10 +93,7 @@ class FileController extends API
 
             if (is_file($filename))
             {
-                $extension = pathinfo($model->originalFilename, PATHINFO_EXTENSION);
-                $type      = \Hoa\Mime\Mime::getMimeFromExtension($extension);
-
-                header('Content-Type: ' . $type);
+                header('Content-Type: ' . $model->mimeType);
                 readfile($filename);
                 die;
             }

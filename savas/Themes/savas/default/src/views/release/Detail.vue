@@ -9,6 +9,9 @@
                     <v-form v-if="model" @submit="save"
                             :buttons="formButtons">
                         <div class="form-item">
+                            <v-checkbox v-model="model.active" label="Active"></v-checkbox>
+                        </div>
+                        <div class="form-item">
                             <label for="channel">
                                 Channel
                             </label>
@@ -168,7 +171,13 @@ export default {
                         done(null)
                     })
             }
-        ])
+        ], () => {
+            me.channels.forEach(channel => {
+                if (channel.main) {
+                    me.model.channelID = channel.id
+                }
+            })
+        })
     },
     methods: {
         save ({ setLoading, setMessage }) {

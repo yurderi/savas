@@ -37,7 +37,6 @@ class PlatformController extends API
     public function setValues (\Favez\ORM\Entity\Entity $entity, $input)
     {
         $entity->set('label', $input['label']);
-        $entity->set('description', $input['description']);
     }
 
 }

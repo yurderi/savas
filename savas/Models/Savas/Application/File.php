@@ -21,9 +21,13 @@ class File extends Entity
 
     public $filename;
 
-    public $originalFilename;
+    public $displayName;
 
     public $size;
+
+    public $extension;
+
+    public $mimeType;
 
     public $created;
 
@@ -55,7 +59,7 @@ class File extends Entity
             'platformID' => [
                 'required' => 'Please select a platform'
             ],
-            'originalFilename' => [
+            'displayName' => [
                 'required' => 'Please enter a filename'
             ]
         ];

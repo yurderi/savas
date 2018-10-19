@@ -4,8 +4,10 @@ export default {
         { name: 'releaseID', type: 'integer' },
         { name: 'platformID', type: 'integer' },
         { name: 'filename', type: 'string', filterable: true },
-        { name: 'originalFilename', type: 'string', filterable: true },
+        { name: 'displayName', type: 'string', filterable: true },
         { name: 'size', type: 'integer' },
+        { name: 'extension', type: 'string' },
+        { name: 'mimeType', type: 'string' },
         { name: 'created', type: 'string' },
         { name: 'changed', type: 'string' }
     ],

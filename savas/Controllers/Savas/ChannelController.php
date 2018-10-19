@@ -38,7 +38,8 @@ class ChannelController extends API
     public function setValues (\Favez\ORM\Entity\Entity $entity, $input)
     {
         $entity->set('label', $input['label']);
-        $entity->set('description', $input['description']);
+        $entity->set('short', $input['short']);
+        $entity->set('main', (int) $input['main']);
     }
 
 }

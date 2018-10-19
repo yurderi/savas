@@ -6,7 +6,7 @@
                     <fa icon="file"></fa>
                 </div>
                 <div class="item-label">
-                    {{ model.originalFilename }}
+                    {{ model.displayName }}
                 </div>
                 <div class="item-meta">
                     <div class="meta-item">
@@ -38,7 +38,7 @@
                 </div>
                 <div class="form-item">
                     <label for="file">file</label>
-                    <v-file id="file" v-model="model.originalFilename" ref="file"></v-file>
+                    <v-file id="file" v-model="model.displayName" ref="file"></v-file>
                 </div>
             </template>
         </v-modal-form>
@@ -99,7 +99,7 @@ export default {
         },
         download (model) {
             let me = this
-            let url = me.$http.defaults.baseURL + '/file/download?id=' + model.id + '&filename=' + model.originalFilename
+            let url = me.$http.defaults.baseURL + '/file/download?id=' + model.id + '&filename=' + model.displayName
 
             window.open(url, '_blank')
         },

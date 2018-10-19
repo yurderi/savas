@@ -15,8 +15,6 @@ class Platform extends Entity
 
     public $label;
 
-    public $description;
-
     public function validate()
     {
         return [

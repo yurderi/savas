@@ -5,9 +5,6 @@
                 <div class="item-label">
                     {{ model.label }}
                 </div>
-                <div class="item-description">
-                    {{ model.description }}
-                </div>
                 <div class="item-actions">
                     <a href="#" @click.prevent="edit(model)">
                         <fa icon="pencil-alt"></fa> edit
@@ -24,10 +21,6 @@
                 <div class="form-item">
                     <label for="label">Label</label>
                     <v-input type="text" id="label" v-model="model.label"></v-input>
-                </div>
-                <div class="form-item">
-                    <label for="description">Description</label>
-                    <v-input type="textarea" id="description" v-model="model.description"></v-input>
                 </div>
             </template>
         </v-modal-form>

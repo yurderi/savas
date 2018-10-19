@@ -25,6 +25,17 @@ class ModelValidator
             {
                 $rulesStr = implode('|', array_keys($rules));
 
+                foreach ($rules as $rule => $message)
+                {
+                    if (($pos = strpos($rule, ':')) !== false)
+                    {
+                        $fixed = substr($rule, 0, $pos);
+
+                        $rules[$fixed] = $message;
+                        unset ($rules[$rule]);
+                    }
+                }
+
                 $this->validator->add($fieldName, $entity->get($fieldName), $rulesStr, $rules);
             }
 

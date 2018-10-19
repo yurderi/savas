@@ -44,6 +44,7 @@ class ApplicationController extends API
     {
         $entity->set('label', $input['label']);
         $entity->set('description', $input['description']);
+        $entity->set('visibility', $input['visibility']);
     }
 
     public function afterSave (\Favez\ORM\Entity\Entity $entity, $isNew)

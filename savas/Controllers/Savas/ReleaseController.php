@@ -48,6 +48,7 @@ class ReleaseController extends API
     {
         $entity->set('appID', $input['appID']);
         $entity->set('channelID', $input['channelID']);
+        $entity->set('active', (int) $input['active']);
         $entity->set('version', $input['version']);
         $entity->set('description', $input['description']);
     }

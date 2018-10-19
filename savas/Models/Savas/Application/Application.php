@@ -17,6 +17,8 @@ class Application extends Entity
 
     public $description;
 
+    public $visibility;
+
     public $privateKey;
 
     public $publicKey;
@@ -34,23 +36,32 @@ class Application extends Entity
     public function validate()
     {
         Validator::addGlobalRule('app.label.unique', function ($fields, $value, $params) {
-            return !self::isUniqueLabel($fields['id'] ?? null, $value);
+            return self::isUniqueLabel($fields['id'] ?? null, $value);
         });
 
         return [
             'label' => [
                 'required'         => 'Please enter a label',
                 'app.label.unique' => 'The entered label is already in use'
+            ],
+            'visibility' => [
+                'required'          => 'Please select a visibility',
+                'in:public,private' => 'The visibility must be public or private.'
             ]
         ];
     }
 
     public static function isUniqueLabel ($appID, $label)
     {
-        return App::db()->from('s_application')
-            ->where('label = ?', $label)
-            ->where('id != ?', $appID)
-            ->count() === 0;
+        $query = App::db()->from('s_application')
+            ->where('label = ?', $label);
+
+        if ($appID > 0)
+        {
+            $query->where('id != ?', $appID);
+        }
+
+        return $query->count() === 0;
     }
 
     public static function isMember($appID)

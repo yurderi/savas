@@ -22,10 +22,10 @@ files.keys().forEach(key => {
 
                 switch (field.type) {
                     case 'integer':
-                        value = 0
+                        value = field.default !== undefined ? field.default : 0
                     break;
                     case 'string':
-                        value = '';
+                        value = field.default !== undefined ? field.default : '';
                     break;
                     case 'boolean':
                         value = field.default !== undefined ? field.default : false
@@ -102,7 +102,7 @@ files.keys().forEach(key => {
                         value = String(value)
                         break;
                     case 'boolean':
-                        value = Boolean(value)
+                        value = Boolean(parseInt(value))
                 }
 
                 data[field.name] = value

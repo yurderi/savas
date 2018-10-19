@@ -4,9 +4,9 @@
             <div class="grid-item channel" slot="item" slot-scope="{ model }" @create="create">
                 <div class="item-label">
                     {{ model.label }}
-                </div>
-                <div class="item-description">
-                    {{ model.description }}
+                    <small v-if="model.main">
+                        (default)
+                    </small>
                 </div>
                 <div class="item-actions">
                     <a href="#" @click.prevent="edit(model)">
@@ -22,12 +22,15 @@
         <v-modal-form :config="formConfig" ref="form" @save="load">
             <template slot="form" slot-scope="{ model }">
                 <div class="form-item">
+                    <v-checkbox v-model="model.main" label="Default"></v-checkbox>
+                </div>
+                <div class="form-item">
                     <label for="label">Label</label>
                     <v-input type="text" id="label" v-model="model.label"></v-input>
                 </div>
                 <div class="form-item">
-                    <label for="description">Description</label>
-                    <v-input type="textarea" id="description" v-model="model.description"></v-input>
+                    <label for="short">Shortcut</label>
+                    <v-input type="text" id="short" v-model="model.short"></v-input>
                 </div>
             </template>
         </v-modal-form>

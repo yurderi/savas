@@ -19,6 +19,14 @@
                             </label>
                             <v-input type="textarea" id="description" v-model="model.description"></v-input>
                         </div>
+                        <div class="form-item">
+                            <label for="description">
+                                Visibility
+                            </label>
+                            <v-select :data="visibilityValues" v-model="model.visibility"
+                                      displayField="value" valueField="id">
+                            </v-select>
+                        </div>
                         <div class="form-item" v-if="!isNew">
                             <label for="publicKey">
                                 Public Key
@@ -56,6 +64,10 @@ export default {
                 name: 'submit',
                 primary: true
             }
+        ],
+        visibilityValues: [
+            { id: 'public', value: 'public' },
+            { id: 'private', value: 'private' }
         ]
     }),
     computed: {
