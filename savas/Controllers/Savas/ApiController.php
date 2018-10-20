@@ -5,8 +5,6 @@ namespace CMS\Controllers\Savas;
 use CMS\Components\Controller;
 use savas\Models\Savas\Application\Application;
 use savas\Models\Savas\Application\File;
-use savas\Models\Savas\Channel;
-use savas\Models\Savas\Platform;
 
 class ApiController extends Controller
 {
@@ -28,7 +26,6 @@ class ApiController extends Controller
         $token    = (string) self::request()->getParam('token');
 
         $app    = Application::repository()->findOneBy(['label' => $id]);
-        $userID = 1; // Todo: load the userID dynamically
 
         if ($app instanceof Application)
         {
@@ -40,41 +37,24 @@ class ApiController extends Controller
                 ]);
             }
 
-            $channel = Channel::repository()->findOneBy(['label' => $channel, 'userID' => $userID]);
-
-            if (!($channel instanceof Channel))
-            {
-                return self::json()->failure([
-                    'code'    => 404,
-                    'message' => 'The provided channel does not exist.'
-                ]);
-            }
-
-            $platform = Platform::repository()->findOneBy(['label' => $platform, 'userID' => $userID]);
-
-            if (!($platform instanceof Platform))
-            {
-                return self::json()->failure([
-                    'code'    => 404,
-                    'message' => 'The provided platform does not exist.'
-                ]);
-            }
-
-            $releases = self::db()->from('s_application_release')
-                ->where('appID', $app->id)
-                ->where('channelID', $channel->id)
-                ->where('active = 1');
+            $releases = self::db()->from('s_application_release r')
+                ->join('s_channel c ON c.id = r.channelID')
+                ->where('r.appID', $app->id)
+                ->where('c.label', $channel)
+                ->where('r.active = 1')
+                ->fetchAll();
 
             foreach ($releases as $release)
             {
                 if (empty($version) || version_compare($release['version'], $version, '>'))
                 {
-                    $file = File::repository()->findOneBy([
-                        'releaseID'  => $release['id'],
-                        'platformID' => $platform->id
-                    ]);
+                    $file = self::db()->from('s_application_release_file f')
+                        ->where('f.releaseID = ?', $release['id'])
+                        ->join('s_platform p ON p.id = f.platformID')
+                        ->where('p.label = ?', $platform)
+                        ->fetch();
 
-                    if (!($file instanceof File))
+                    if (empty($file))
                     {
                         return self::json()->failure([
                             'code'    => 404,
@@ -85,9 +65,9 @@ class ApiController extends Controller
                     return self::json()->success([
                         'version'      => $release['version'],
                         'released'     => $release['created'],
-                        'size'         => $file->size,
+                        'size'         => $file['size'],
                         'releaseNotes' => $release['description'],
-                        'filename'     => self::url('savas/api/download/' . $file->displayName . '?id=' . $file->filename),
+                        'filename'     => self::url('savas/api/download/' . $file['displayName'] . '?id=' . $file['filename']),
 
                         'isNewer'      => true
                     ]);
