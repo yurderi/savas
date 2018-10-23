@@ -49,7 +49,7 @@ class UserController extends Controller
     protected function register ($email, $password)
     {
         Validator::addGlobalRule('unique_email', function ($fields, $value, $params) {
-            return User::repository()->findOneBy(['email' => $value]) === null;
+            return User::repository()->findOneBy(['email' => $value]) === false;
         });
 
         $validator = new Validator();
