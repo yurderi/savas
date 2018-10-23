@@ -13,7 +13,7 @@ Vue.config.productionTip = false
 Vue.use(VueUI)
 
 Vue.http = Vue.prototype.$http = axios.create({
-    baseURL: 'savas'
+    baseURL: process.env.BASE_URL
 })
 
 Vue.prototype.$moment = require('moment')
