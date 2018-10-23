@@ -24,13 +24,9 @@ class ApplicationController extends API
             ->where('am.userID', $userID)
             ->select(null)->select('a.*')
             // For current version
-            ->join('s_channel c ON c.userID = am.userID AND main = 1')
-            ->join('s_application_release ar ON ar.appID = a.id AND ar.channelID = c.id')
-            ->select('ar.version AS currentVersion')
+            ->select('(SELECT version FROM s_application_release WHERE appID = am.id ORDER BY id DESC LIMIT 1) AS currentVersion')
             // For release count
-            ->join('s_application_release ar2 ON ar.appID = a.id')
-            ->select('COUNT(ar.id) AS releaseCount')
-            ->groupBy('ar.id')
+            ->select('(SELECT COUNT(id) FROM s_application_release WHERE appID = am.id) AS releaseCount')
             // For downloadCount
             ->select('0 AS downloadCount')
             // For feedbackCount
