@@ -1,0 +1,38 @@
+{
+  "name": "savas-cli",
+  "version": "0.0.1",
+  "description": "A cli tool to manage releases through the terminal",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yurderi/savas.git"
+  },
+  "keywords": [
+    "cli",
+    "tool",
+    "savas",
+    "release",
+    "system"
+  ],
+  "author": "tyurderi@yahoo.de",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yurderi/savas/issues"
+  },
+  "homepage": "https://github.com/yurderi/savas#readme",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "commander": "^2.19.0",
+    "fs-extra": "^7.0.0",
+    "inquirer": "^6.2.0",
+    "lodash": "^4.17.11",
+    "shelljs": "^0.8.2",
+    "yaml": "^1.0.0"
+  },
+  "bin": {
+    "savas": "./bin/savas.js"
+  }
+}
