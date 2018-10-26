@@ -28,13 +28,18 @@ abstract class API extends Controller
      */
     final public function preDispatch ()
     {
-        if (!self::auth()->loggedIn())
+        if (!self::auth()->loggedIn() && !$this->isAuthenticatedByToken())
         {
             $this->app()->respond(self::json()->failure(['message' => 'Not logged in']));
             die;
         }
 
         $this->config = $this->configure();
+    }
+
+    public function isAuthenticatedByToken ()
+    {
+        return false;
     }
 
     final public function listAction ()

@@ -4,7 +4,6 @@ namespace savas;
 
 use Favez\Mvc\App;
 use savas\Components\ModelValidator;
-use Slim\Http\Body;
 use Slim\Http\Response;
 
 class Bootstrap extends \CMS\Components\Plugin\Bootstrap
@@ -46,6 +45,7 @@ class Bootstrap extends \CMS\Components\Plugin\Bootstrap
         $this->registerController('Savas', 'Platform');
         $this->registerController('Savas', 'Release');
         $this->registerController('Savas', 'File');
+        $this->registerController('Savas', 'Token');
 
         App::instance()->any('/savas/api/download/{filename}', function () {
             require_once __DIR__ . '/Controllers/Savas/ApiController.php';

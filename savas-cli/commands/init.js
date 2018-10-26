@@ -1,6 +1,3 @@
-const path = require('path')
-const fs = require('fs-extra')
-const yaml = require('yaml')
 const Config = require('../components/config')
 
 module.exports = () => {

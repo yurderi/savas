@@ -10,7 +10,8 @@ module.exports = class {
         me.directory = path.join(process.cwd(), '.savas')
         me.filename  = path.join(me.directory, 'config.yml')
         me.data = me.read() || {
-            remote: ''
+            remote: '',
+            auth: null
         }
     }
 
@@ -25,6 +26,14 @@ module.exports = class {
         let me = this
 
         return fs.existsSync(me.filename)
+    }
+
+    isAuthenticated() {
+        let me = this
+
+        return typeof me.data.auth === 'object'
+            && 'appID' in me.data.auth
+            && 'token' in me.data.auth
     }
 
     write () {

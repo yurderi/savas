@@ -4,6 +4,9 @@
         <v-content>
             <v-breadcrumb :items="breadcrumb"></v-breadcrumb>
             <v-tab-menu>
+                <v-tab id="tokens" label="API Tokens">
+                    <v-token-grid></v-token-grid>
+                </v-tab>
                 <v-tab id="channels" label="Channels">
                     <v-channel-grid></v-channel-grid>
                 </v-tab>
@@ -18,6 +21,7 @@
 <script>
 import VChannelGrid from '@/views/channel/Grid'
 import VPlatformGrid from '@/views/platform/Grid'
+import VTokenGrid from '@/views/token/Grid'
 
 export default {
     computed: {
@@ -36,7 +40,8 @@ export default {
     },
     components: {
         VChannelGrid,
-        VPlatformGrid
+        VPlatformGrid,
+        VTokenGrid
     }
 }
 </script>
