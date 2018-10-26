@@ -5,6 +5,7 @@ namespace CMS\Controllers\Savas;
 use CMS\Components\Controller;
 use savas\Models\Savas\Application\Application;
 use savas\Models\Savas\Application\File;
+use savas\Models\Savas\Token\Token;
 
 class ApiController extends Controller
 {
@@ -105,6 +106,29 @@ class ApiController extends Controller
         }
 
         return '404 Not Found';
+    }
+
+    public function authAction()
+    {
+        $token = self::request()->getParam('api_token');
+        $model = Token::repository()->findOneBy(['token' => $token]);
+
+        if ($model instanceof Token)
+        {
+            $applications = self::db()->from('s_application a')
+                ->join('s_application_member m ON m.appID = a.id')
+                ->where('m.userID = ?', $model->userID)
+                ->select(null)->select('a.id, a.label')
+                ->fetchAll();
+
+            return self::json()->success([
+                'apps' => $applications
+            ]);
+        }
+
+        return self::json()->failure([
+            'message' => 'Invalid token'
+        ]);
     }
 
 }

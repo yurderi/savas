@@ -3,8 +3,10 @@
 namespace savas\Components\Controllers;
 
 use CMS\Components\Controller;
+use CMS\Models\User\User;
 use Favez\ORM\Entity\Entity;
 use Favez\ORM\Entity\Repository;
+use savas\Models\Savas\Token\Token;
 
 abstract class API extends Controller
 {
@@ -39,6 +41,18 @@ abstract class API extends Controller
 
     public function isAuthenticatedByToken ()
     {
+        $token = self::request()->getHeaderLine('X-API-Token');
+        $model = Token::repository()->findOneBy(['token' => $token]);
+
+        if ($model instanceof Token)
+        {
+            $user = User::repository()->find($model->userID);
+
+            self::auth()->setUser($user);
+
+            return true;
+        }
+
         return false;
     }
 

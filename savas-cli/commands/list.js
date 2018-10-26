@@ -13,7 +13,7 @@ module.exports = () => {
             let url = config.data.remote + '/savas/release/list?applicationID=' + config.data.auth.appID
             let axios_config = {
                 headers: {
-                    'X-Access-Token': config.data.auth.token
+                    'X-API-Token': config.data.auth.token
                 }
             }
 
