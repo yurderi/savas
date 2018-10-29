@@ -23,7 +23,7 @@ module.exports = class API {
                 version,
                 channel,
                 description,
-                active: false
+                active: 0
             }
         }
 

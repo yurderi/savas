@@ -13,7 +13,19 @@ module.exports = ({ _, channel, description }) => {
                 channel,
                 description
             }).then(response => {
-                console.log(response)
+                if (response.success) {
+                    console.log('the release were created successfully')
+                } else {
+                    console.log('the release could not be created. see errors below')
+
+                    if ('messages' in response) {
+                        response.messages.forEach(m => {
+                            console.log(' - %s', m)
+                        })
+                    } else {
+                        console.log(response)
+                    }
+                }
             })
         } else {
             console.log('you are not authenticated yet')

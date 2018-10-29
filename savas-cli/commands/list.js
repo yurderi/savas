@@ -14,7 +14,8 @@ module.exports = () => {
                         id: release.id,
                         channel: release.channel_label,
                         version: release.version,
-                        public: release.active ? 'yes' : 'no',
+                        public: parseInt(release.active) === 1 ? 'yes' : 'no',
+                        files: release.files,
                         description: release.description,
                         created: release.created,
                         changed: release.changed

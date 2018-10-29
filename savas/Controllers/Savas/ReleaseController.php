@@ -55,15 +55,15 @@ class ReleaseController extends API
         {
             // Allow the user to enter the name of the channel for better usability
             $input['channelID'] = (int) self::db()->from('s_channel')
-                ->where('label = ?', $input['channel'])
+                ->where('label = ?', $input['channel'] ?? '')
                 ->fetchColumn(0);
         }
 
-        $entity->set('appID', $input['appID']);
-        $entity->set('channelID', $input['channelID']);
-        $entity->set('active', (int) $input['active']);
-        $entity->set('version', $input['version']);
-        $entity->set('description', $input['description']);
+        $entity->set('appID', $input['appID'] ?? 0);
+        $entity->set('channelID', $input['channelID'] ?? 0);
+        $entity->set('active', (int) $input['active'] ?? false);
+        $entity->set('version', $input['version'] ?? '');
+        $entity->set('description', $input['description'] ?? '');
     }
 
     public function afterSave (\Favez\ORM\Entity\Entity $entity, $isNew)
