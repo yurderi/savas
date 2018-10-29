@@ -1,26 +1,26 @@
-const path = require('path')
-const fs = require('fs-extra')
-const yaml = require('yaml')
 const Config = require('../components/config')
-const inquirer = require('inquirer')
-const axios = require('axios')
+const API = require('../components/api')
 
 module.exports = () => {
     let config = new Config()
 
     if (config.isTouched()) {
         if (config.isAuthenticated()) {
-            let url = config.data.remote + '/savas/release/list?applicationID=' + config.data.auth.appID
-            let axios_config = {
-                headers: {
-                    'X-API-Token': config.data.auth.token
-                }
-            }
+            let api = new API(config)
 
-            axios.get(url, axios_config)
-                .then(response => response.data)
-                .then(response => {
-                    console.log(response)
+            api.getReleases()
+                .then(releases => {
+                    let data = releases.data.map(release => ({
+                        id: release.id,
+                        channel: release.channel_label,
+                        version: release.version,
+                        public: release.active ? 'yes' : 'no',
+                        description: release.description,
+                        created: release.created,
+                        changed: release.changed
+                    }))
+
+                    console.table('Current releases', data)
                 })
         } else {
             console.log('you are not authenticated yet')

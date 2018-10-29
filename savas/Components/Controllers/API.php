@@ -16,6 +16,9 @@ abstract class API extends Controller
      */
     private $config;
 
+    /** @var boolean */
+    protected $isApiCall;
+
     /**
      * [
      *     'model' => 'MyModel'
@@ -49,6 +52,7 @@ abstract class API extends Controller
             $user = User::repository()->find($model->userID);
 
             self::auth()->setUser($user);
+            $this->isApiCall = true;
 
             return true;
         }

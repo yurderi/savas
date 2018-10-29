@@ -1,30 +1,20 @@
-const program = require('commander')
 const _ = require('lodash')
-const pkg = require('./package')
+const ctable = require('console.table')
+const yargs = require('yargs')
 
-program
-    .version(pkg.version)
+let argv = yargs
+    .command('init', 'Init savas in currenty directory', {}, require('./commands/init'))
 
-program
-    .command('init')
-    .description('Init a savas project in the current directory')
-    .action(require('./commands/init'))
+    .command('set-remote [host]', 'Defines the remote', {}, require('./commands/remote/set'))
 
-program
-    .command('set-remote <host>')
-    .description('Sets the project remote')
-    .action(require('./commands/remote/set.js'))
+    .command('auth', 'Authenticate on current remote', {}, require('./commands/auth'))
 
-program
-    .command('auth')
-    .description('Authenticate')
-    .action(require('./commands/auth.js'))
+    .command('list', 'Lists available releases', {}, require('./commands/list'))
 
-program
-    .command('list')
-    .description('List available releases')
-    .action(require('./commands/list.js'))
+    .command('create-release', 'Lists available releases', {
+        version: {
+            string: true
+        }
+    }, require('./commands/create-release'))
 
-if(_.isEmpty(program.parse(process.argv).args) && process.argv.length === 2) {
-    program.help()
-}
+    .argv

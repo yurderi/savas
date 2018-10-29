@@ -30,6 +30,11 @@ class ReleaseController extends API
             ->orderBy('ar.version DESC')
             ->groupBy('ar.id');
 
+        if ($this->isApiCall)
+        {
+            $query->select('(SELECT label FROM s_channel WHERE id = ar.channelID) AS channel_label');
+        }
+
         return $query;
     }
 
@@ -46,6 +51,14 @@ class ReleaseController extends API
 
     public function setValues (\Favez\ORM\Entity\Entity $entity, $input)
     {
+        if ($this->isApiCall)
+        {
+            // Allow the user to enter the name of the channel for better usability
+            $input['channelID'] = (int) self::db()->from('s_channel')
+                ->where('label = ?', $input['channel'])
+                ->fetchColumn(0);
+        }
+
         $entity->set('appID', $input['appID']);
         $entity->set('channelID', $input['channelID']);
         $entity->set('active', (int) $input['active']);
