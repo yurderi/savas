@@ -1,25 +1,25 @@
 <?php
 
-namespace CMS\Controllers\Savas;
+namespace CMS\Controllers\Frontend;
 
 use savas\Components\Controllers\API;
-use savas\Models\Savas\Token\Token;
+use savas\Models\Savas\Platform;
 
-class TokenController extends API
+class PlatformController extends API
 {
 
     public function configure()
     {
         return [
-            'model' => Token::class
+            'model' => Platform::class
         ];
     }
 
     public function getListQuery()
     {
         $userID = self::auth()->userID();
-        $query  = self::db()->from('s_api_token')
-            ->where('userID = ?', $userID);
+        $query  = self::db()->from('s_platform')
+            ->where('userID = -1 OR userID = ?', $userID);
 
         return $query;
     }
@@ -32,14 +32,10 @@ class TokenController extends API
     public function setDefaultValues(\Favez\ORM\Entity\Entity $entity)
     {
         $entity->set('userID', self::auth()->userID());
-        $entity->set('created', date('Y-m-d H:i:s'));
-        $entity->set('token', md5(uniqid('savas_api_token')));
     }
 
     public function setValues (\Favez\ORM\Entity\Entity $entity, $input)
     {
-        $entity->set('changed', date('Y-m-d H:i:s'));
-        $entity->set('enabled', (int) $input['enabled']);
         $entity->set('label', $input['label']);
     }
 

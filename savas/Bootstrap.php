@@ -2,7 +2,9 @@
 
 namespace savas;
 
+use CMS\Components\Form\Form;
 use Favez\Mvc\App;
+use savas\Commands\ConfigCommand;
 use savas\Components\ModelValidator;
 use Slim\Http\Response;
 
@@ -18,6 +20,13 @@ class Bootstrap extends \CMS\Components\Plugin\Bootstrap
         `ln -s $currentPath $targetPath`;
 
         $this->migrateDb();
+
+        //
+        $form = $this->createForm();
+        $form->elements()->set('domain', 'text', [
+            'label' => 'Domain'
+        ]);
+        $form->save();
 
         return true;
     }
@@ -36,24 +45,43 @@ class Bootstrap extends \CMS\Components\Plugin\Bootstrap
 
     public function execute()
     {
+        if (PHP_SAPI === 'cli') {
+            App::events()->subscribe('core.console_commands.collect', function() {
+                return [
+                    new ConfigCommand()
+                ];
+            });
+
+            return;
+        }
+
+        // Make sure the plugin is limited to a domain
+        $form = Form::load('plugin_savas');
+        $domainID = (int) $form->domain;
+        if ($domainID !== (int) App::domain()->id) {
+            return;
+        }
+
         require_once $this->getPath() . '/vendor/autoload.php';
 
-        $this->registerController('Savas', 'Index');
-        $this->registerController('Savas', 'User');
-        $this->registerController('Savas', 'Application');
-        $this->registerController('Savas', 'Channel');
-        $this->registerController('Savas', 'Platform');
-        $this->registerController('Savas', 'Release');
-        $this->registerController('Savas', 'File');
-        $this->registerController('Savas', 'Token');
+        $this->registerController('Frontend', 'Index');
+        $this->registerController('Frontend', 'User');
+        $this->registerController('Frontend', 'Application');
+        $this->registerController('Frontend', 'Channel');
+        $this->registerController('Frontend', 'Platform');
+        $this->registerController('Frontend', 'Release');
+        $this->registerController('Frontend', 'File');
+        $this->registerController('Frontend', 'Token');
 
-        App::instance()->any('/savas/api/download/{filename}', function () {
-            require_once __DIR__ . '/Controllers/Savas/ApiController.php';
+        App::instance()->any('/api/v1/download/{filename}', function () {
+            require_once __DIR__ . '/Controllers/Frontend/ApiController.php';
 
-            return App::dispatcher()->dispatch('savas:api:download', []);
+            return App::dispatcher()->dispatch('frontend:Api:download', []);
         });
 
-        $this->registerController('Savas', 'Api');
+        $this->registerController('Frontend', 'Api', false);
+        App::instance()->any('/api/v1/[{action}]', 'frontend:Api:{action}');
+
 
         App::di()->registerShared('modelValidator', function() {
             return new ModelValidator();
@@ -61,7 +89,7 @@ class Bootstrap extends \CMS\Components\Plugin\Bootstrap
 
         App::instance()->getContainer()['notFoundHandler'] = function() {
             return function (\Slim\Http\Request $request,  Response $response) {
-                $html = App::instance()->dispatcher()->dispatch('savas:Index:notFound', []);
+                $html = App::instance()->dispatcher()->dispatch('frontend:Index:notFound', []);
 
                 $response->getBody()->write($html);
 

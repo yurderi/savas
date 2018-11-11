@@ -1,6 +1,6 @@
 <?php
 
-namespace CMS\Controllers\Savas;
+namespace CMS\Controllers\Frontend;
 
 use CMS\Components\Controller;
 use savas\Models\Savas\Application\Application;
@@ -68,7 +68,7 @@ class ApiController extends Controller
                         'released'     => $release['created'],
                         'size'         => $file['size'],
                         'releaseNotes' => $release['description'],
-                        'filename'     => self::url('savas/api/download/' . $file['displayName'] . '?id=' . $file['filename']),
+                        'filename'     => self::url('api/v1/download/' . $file['displayName'] . '?id=' . $file['filename']),
 
                         'isNewer'      => true
                     ]);

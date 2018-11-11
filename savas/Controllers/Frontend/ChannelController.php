@@ -1,24 +1,25 @@
 <?php
 
-namespace CMS\Controllers\Savas;
+namespace CMS\Controllers\Frontend;
 
+use Favez\ORM\Entity\Entity;
 use savas\Components\Controllers\API;
-use savas\Models\Savas\Platform;
+use savas\Models\Savas\Token;
 
-class PlatformController extends API
+class ChannelController extends API
 {
 
     public function configure()
     {
         return [
-            'model' => Platform::class
+            'model' => Token::class
         ];
     }
 
     public function getListQuery()
     {
         $userID = self::auth()->userID();
-        $query  = self::db()->from('s_platform')
+        $query  = self::db()->from('s_channel')
             ->where('userID = -1 OR userID = ?', $userID);
 
         return $query;
@@ -37,6 +38,8 @@ class PlatformController extends API
     public function setValues (\Favez\ORM\Entity\Entity $entity, $input)
     {
         $entity->set('label', $input['label']);
+        $entity->set('short', $input['short']);
+        $entity->set('main', (int) $input['main']);
     }
 
 }

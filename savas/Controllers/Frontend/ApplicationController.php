@@ -1,6 +1,6 @@
 <?php
 
-namespace CMS\Controllers\Savas;
+namespace CMS\Controllers\Frontend;
 
 use savas\Components\Controllers\API;
 use savas\Models\Savas\Application\Application;

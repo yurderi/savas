@@ -1,6 +1,6 @@
 <?php
 
-namespace CMS\Controllers\Savas;
+namespace CMS\Controllers\Frontend;
 
 use Favez\ORM\Entity\Entity;
 use Favez\ORM\Entity\Repository;
@@ -50,7 +50,7 @@ class FileController extends API
             $entity->filename  = $name;
             $entity->size      = $file->getSize();
             $entity->extension = pathinfo($entity->displayName, PATHINFO_EXTENSION);
-            $entity->mimeType  = \Hoa\Mime\Mime::getMimeFromExtension($entity->extension);
+            $entity->mimeType  = \Hoa\Mime\Mime::getMimeFromExtension($entity->extension) ?? '';
         }
     }
 

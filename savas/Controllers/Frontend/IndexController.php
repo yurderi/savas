@@ -1,6 +1,6 @@
 <?php
 
-namespace CMS\Controllers\Savas;
+namespace CMS\Controllers\Frontend;
 
 use CMS\Components\Controller;
 

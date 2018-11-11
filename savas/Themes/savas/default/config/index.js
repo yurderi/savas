@@ -11,9 +11,12 @@ module.exports = {
         assetsSubDirectory: 'static',
         assetsPublicPath: '/',
         proxyTable: {
-            '/savas': {
+            '/api': {
                 target: 'http://savas.test/',
-                changeOrigin: true
+                changeOrigin: true,
+                pathRewrite: {
+                    '/api' : ''
+                }
             }
         },
 

@@ -4,7 +4,7 @@ namespace Savas\Migrations;
 
 use CMS\Components\Database\Migration;
 
-class Migration_1 extends Migration
+class Migration_2 extends Migration
 {
 
     public function up()
