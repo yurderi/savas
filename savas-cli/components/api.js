@@ -7,7 +7,7 @@ module.exports = class API {
 
         me.config = config
         me.http = axios.create({
-            baseURL: me.config.data.remote + '/savas/',
+            baseURL: me.config.data.remote + '/',
             headers: {
                 'X-API-Token': config.data.auth.token
             }

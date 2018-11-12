@@ -1,7 +1,8 @@
 {
+  "packageID": "pv_savas",
   "label": "savas",
   "description": "A release syste",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "tyurderi",
   "website": "https://www.yurderi.de",
   "email": "tyurderi@yahoo.de",

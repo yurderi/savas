@@ -38,7 +38,7 @@ module.exports = () => {
         (resolve, reject, data) => {
             console.log('checking token...')
 
-            let url = config.data.remote + '/savas/api/auth'
+            let url = config.data.remote + 'api/v1/auth'
 
             axios.get(url, { params: { api_token: data.api_token } })
                 .then(response => response.data)
