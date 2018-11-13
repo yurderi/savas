@@ -20,6 +20,21 @@ class FileController extends API
         ];
     }
 
+    public function getListQuery()
+    {
+        $userID = self::auth()->userID();
+        $releaseID  = self::request()->getParam('releaseID');
+        $query  = self::db()->from('s_application_release_file f')
+            ->leftJoin('s_application_release r ON r.id = f.releaseID')
+            ->leftJoin('s_application a ON a.id = r.appID')
+            ->leftJoin('s_application_member m ON m.appID = a.id')
+            ->where('m.userID', $userID)
+            ->where('f.releaseID', $releaseID)
+            ->select(null)->select('f.*');
+
+        return $query;
+    }
+
     protected function setDefaultValues(Entity $entity)
     {
         $entity->created   = date('Y-m-d H:i:s');

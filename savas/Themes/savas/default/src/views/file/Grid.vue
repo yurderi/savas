@@ -64,7 +64,10 @@ export default {
             bytes,
             gridConfig: {
                 model: this.$models.file,
-                columns: 4
+                columns: 4,
+                fetchParams: () => ({
+                    releaseID: this.release.id
+                })
             },
             formConfig: {
                 label: 'file',
