@@ -36,7 +36,9 @@ class Application extends Entity
     public function validate()
     {
         Validator::addGlobalRule('app.label.unique', function ($fields, $value, $params) {
-            return self::isUniqueLabel($fields['id'] ?? null, $value);
+            $appID = App::request()->getParam('id');
+
+            return self::isUniqueLabel($appID, $value);
         });
 
         return [
