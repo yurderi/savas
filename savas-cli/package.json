@@ -1,6 +1,6 @@
 {
   "name": "savas-cli",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A cli tool to manage releases through the terminal",
   "main": "index.js",
   "scripts": {
