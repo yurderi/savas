@@ -1,20 +1,38 @@
+const program = require('commander')
 const _ = require('lodash')
-const ctable = require('console.table')
-const yargs = require('yargs')
+const pkg = require('./package')
 
-let argv = yargs
-    .command('init', 'Init savas in currenty directory', {}, require('./commands/init'))
+program
+    .version(pkg.version)
 
-    .command('set-remote [host]', 'Defines the remote', {}, require('./commands/remote/set'))
+program.command('init')
+    .description('Init a savas project in the current directory')
+    .action(require('./commands/init'))
+    
+program.command('set-remote <host>')
+    .description('Defines the remote')
+    .action(require('./commands/remote/set'))
 
-    .command('auth', 'Authenticate on current remote', {}, require('./commands/auth'))
+program.command('auth')
+    .description('Authenticate on the current remote')
+    .action(require('./commands/auth'))
 
-    .command('list', 'Lists available releases', {}, require('./commands/list'))
+program.command('list')
+    .description('List available releases')
+    .action(require('./commands/list'))
 
-    .command('create-release', 'Lists available releases', {
-        version: {
-            string: true
-        }
-    }, require('./commands/create-release'))
+program.command('create-release <version>')
+    .description('Creates a new release')
+    .option('--channel [channel]', 'Define the release channel')
+    .option('--description [description]', 'Define the release notes')
+    .action(require('./commands/create-release'))
 
-    .argv
+program.command('upload <filename> <version>')
+    .description('Uploads a file to an existing release')
+    .option('--channel [channel]', 'A part to define the release')
+    .option('--platform [platform]', 'The target platform')
+    .action(require('./commands/upload'))
+
+if(_.isEmpty(program.parse(process.argv).args) && process.argv.length === 2) {
+    program.help()
+}

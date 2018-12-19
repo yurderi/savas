@@ -1,6 +1,6 @@
 const Config = require('../../components/config')
 
-module.exports = ({ host }) => {
+module.exports = (host) => {
     let config = new Config()
 
     if (config.isTouched()) {

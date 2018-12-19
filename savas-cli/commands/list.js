@@ -8,21 +8,24 @@ module.exports = () => {
         if (config.isAuthenticated()) {
             let api = new API(config)
 
-            api.getReleases()
-                .then(releases => {
-                    let data = releases.data.map(release => ({
-                        id: release.id,
-                        channel: release.channel_label,
-                        version: release.version,
-                        public: parseInt(release.active) === 1 ? 'yes' : 'no',
-                        files: release.files,
-                        description: release.description,
-                        created: release.created,
-                        changed: release.changed
-                    }))
-
+            api.getReleases().then(releases => {
+                let data = releases.data.map(release => ({
+                    id: release.id,
+                    channel: release.channel_label,
+                    version: release.version,
+                    public: parseInt(release.active) === 1 ? 'yes' : 'no',
+                    files: release.files,
+                    description: release.description,
+                    created: release.created,
+                    changed: release.changed
+                }))
+            
+                if (data.length > 0) {
                     console.table('Current releases', data)
-                })
+                } else {
+                    console.log('No releases yet')
+                }
+            })
         } else {
             console.log('you are not authenticated yet')
         }

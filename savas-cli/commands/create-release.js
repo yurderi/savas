@@ -1,15 +1,15 @@
 const Config = require('../components/config')
 const API = require('../components/api')
 
-module.exports = ({ _, channel, description }) => {
+module.exports = (version, {channel, description}) => {
     let config = new Config()
-
+    
     if (config.isTouched()) {
         if (config.isAuthenticated()) {
             let api = new API(config)
-
+            
             api.createRelease({
-                version: _[1],
+                version,
                 channel,
                 description
             }).then(response => {
@@ -17,7 +17,7 @@ module.exports = ({ _, channel, description }) => {
                     console.log('the release were created successfully')
                 } else {
                     console.log('the release could not be created. see errors below')
-
+                    
                     if ('messages' in response) {
                         response.messages.forEach(m => {
                             console.log(' - %s', m)
