@@ -43,6 +43,7 @@ class ApiController extends Controller
                 ->where('r.appID', $app->id)
                 ->where('c.label', $channel)
                 ->where('r.active = 1')
+                ->orderBy('r.version DESC')
                 ->fetchAll();
 
             foreach ($releases as $release)

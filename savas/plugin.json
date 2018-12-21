@@ -2,12 +2,15 @@
   "packageID": "pv_savas",
   "label": "savas",
   "description": "A release system",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "author": "tyurderi",
   "website": "https://www.yurderi.de",
   "email": "tyurderi@yahoo.de",
   "requires": {},
   "changelog": {
+    "1.0.3": [
+      "Fix orderBy in api/updates"
+    ],
     "1.0.2": [
       "Fix typo in plugin description",
       "Fix validator app.unique.label",
