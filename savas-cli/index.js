@@ -1,6 +1,9 @@
 const program = require('commander')
 const _ = require('lodash')
 const pkg = require('./package')
+const updateNotifier = require('update-notifier');
+
+updateNotifier({pkg}).notify();
 
 program
     .version(pkg.version)
@@ -25,6 +28,7 @@ program.command('create-release <version>')
     .description('Creates a new release')
     .option('--channel [channel]', 'Define the release channel')
     .option('--description [description]', 'Define the release notes')
+    .option('--enable', 'Enables the release after creating')
     .action(require('./commands/create-release'))
 
 program.command('upload <filename> <version>')

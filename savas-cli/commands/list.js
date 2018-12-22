@@ -1,6 +1,8 @@
 const Config = require('../components/config')
 const API = require('../components/api')
 
+require('console.table')
+
 module.exports = () => {
     let config = new Config()
 
@@ -15,13 +17,13 @@ module.exports = () => {
                     version: release.version,
                     public: parseInt(release.active) === 1 ? 'yes' : 'no',
                     files: release.files,
-                    description: release.description,
+                    // description: release.description,
                     created: release.created,
                     changed: release.changed
                 }))
             
                 if (data.length > 0) {
-                    console.table('Current releases', data)
+                    console.table('Available releases', data)
                 } else {
                     console.log('No releases yet')
                 }

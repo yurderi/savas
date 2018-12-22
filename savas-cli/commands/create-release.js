@@ -1,17 +1,18 @@
 const Config = require('../components/config')
 const API = require('../components/api')
 
-module.exports = (version, {channel, description}) => {
+module.exports = (version, {channel, description, enable}) => {
     let config = new Config()
     
     if (config.isTouched()) {
         if (config.isAuthenticated()) {
             let api = new API(config)
-            
+    
             api.createRelease({
                 version,
                 channel,
-                description
+                description,
+                enable
             }).then(response => {
                 if (response.success) {
                     console.log('the release were created successfully')

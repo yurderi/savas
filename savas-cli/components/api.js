@@ -87,7 +87,7 @@ module.exports = class API {
         })
     }
     
-    createRelease ({version, channel, description}) {
+    createRelease ({version, channel, description, enable}) {
         let me = this
         
         let data = {
@@ -96,7 +96,7 @@ module.exports = class API {
                 version,
                 channel,
                 description,
-                active: 0
+                active: enable === true ? 1 : 0
             }
         }
         
