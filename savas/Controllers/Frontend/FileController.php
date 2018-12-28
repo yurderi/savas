@@ -92,6 +92,7 @@ class FileController extends API
 
         if ($id > 0)
         {
+            /** @var File $model */
             $model = $repository->find($id);
 
             if (!($model instanceof $className))
@@ -109,6 +110,8 @@ class FileController extends API
             if (is_file($filename))
             {
                 header('Content-Type: ' . $model->mimeType);
+                header('Content-disposition: attachment; filename="' . $model->displayName . '"');
+    
                 readfile($filename);
                 die;
             }

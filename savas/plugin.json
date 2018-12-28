@@ -8,6 +8,9 @@
   "email": "tyurderi@yahoo.de",
   "requires": {},
   "changelog": {
+    "1.0.4": [
+      "Add filename when downloading file directly"
+    ],
     "1.0.3": [
       "Fix orderBy in api/updates"
     ],
