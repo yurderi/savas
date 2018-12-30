@@ -12,9 +12,9 @@ export default {
         { name: 'changed', type: 'string' }
     ],
     proxy: {
-        list: 'file/list',
-        detail: 'file/detail',
-        save: 'file/save',
-        remove: 'file/remove'
+        list: 'frontend/file/list',
+        detail: 'frontend/file/detail',
+        save: 'frontend/file/save',
+        remove: 'frontend/file/remove'
     }
 }

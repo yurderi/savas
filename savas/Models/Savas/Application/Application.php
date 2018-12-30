@@ -1,6 +1,6 @@
 <?php
 
-namespace savas\Models\Savas\Application;
+namespace ProVallo\Plugins\Savas\Models\Savas\Application;
 
 use Favez\Mvc\App;
 use Favez\Mvc\ORM\Entity;
@@ -68,7 +68,7 @@ class Application extends Entity
 
     public static function isMember($appID)
     {
-        $userID = App::auth()->userID();
+        $userID = App::auth()->getUserID();
         $result = App::db()->from('s_application_member')
             ->where('appID', $appID)
             ->where('userID', $userID)

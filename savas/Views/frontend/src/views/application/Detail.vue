@@ -153,7 +153,7 @@ export default {
 
             spin()
 
-            me.$http.get('application/checkLabel', { params: me.model })
+            me.$http.get('frontend/application/checkLabel', { params: me.model })
                 .then(response => response.data)
                 .then(response => {
                     if (response.used === true) {

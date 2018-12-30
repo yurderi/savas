@@ -13,9 +13,9 @@ export default {
         { name: 'files', type: 'integer '}
     ],
     proxy: {
-        list: 'release/list',
-        detail: 'release/detail',
-        save: 'release/save',
-        remove: 'release/remove'
+        list: 'frontend/release/list',
+        detail: 'frontend/release/detail',
+        save: 'frontend/release/save',
+        remove: 'frontend/release/remove'
     }
 }

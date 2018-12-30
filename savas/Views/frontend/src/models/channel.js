@@ -7,9 +7,9 @@ export default {
         { name: 'main', type: 'boolean' },
     ],
     proxy: {
-        list: 'channel/list',
-        detail: 'channel/detail',
-        save: 'channel/save',
-        remove: 'channel/remove'
+        list: 'frontend/channel/list',
+        detail: 'frontend/channel/detail',
+        save: 'frontend/channel/save',
+        remove: 'frontend/channel/remove'
     }
 }

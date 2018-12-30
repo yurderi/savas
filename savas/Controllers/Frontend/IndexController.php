@@ -1,21 +1,19 @@
 <?php
 
-namespace CMS\Controllers\Frontend;
+namespace ProVallo\Controllers\Frontend;
 
-use CMS\Components\Controller;
-
-class IndexController extends Controller
+class IndexController extends \ProVallo\Components\Controller
 {
 
     public function indexAction()
     {
-        $plugin = $this->plugins()->get('savas');
-        $filename = $plugin->getPath() . '/Themes/savas/default/dist/index.html';
+        $plugin = $this->plugins()->get('Savas');
+        $filename = $plugin->getPath() . '/Views/frontend/dist/index.html';
 
         $html = file_get_contents($filename);
-        $html = str_replace('/static', '/ext/custom/savas/Themes/savas/default/dist/static', $html);
+        $html = str_replace('/static', '/ext/Savas/Views/frontend/dist/static', $html);
 
-        $this->httpCache()->setCacheKey('savas/index.html');
+        // $this->httpCache()->setCacheKey('savas/index.html');
 
         return $html;
     }

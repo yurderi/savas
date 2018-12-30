@@ -1,10 +1,10 @@
 <?php
 
-namespace CMS\Controllers\Frontend;
+namespace ProVallo\Controllers\Frontend;
 
-use savas\Components\Controllers\API;
-use savas\Models\Savas\Application\Application;
-use savas\Models\Savas\Application\Release;
+use ProVallo\Plugins\Savas\Components\Controllers\API;
+use ProVallo\Plugins\Savas\Models\Savas\Application\Application;
+use ProVallo\Plugins\Savas\Models\Savas\Application\Release;
 
 class ReleaseController extends API
 {
@@ -18,7 +18,7 @@ class ReleaseController extends API
 
     public function getListQuery()
     {
-        $userID = self::auth()->userID();
+        $userID = self::auth()->getUserID();
         $appID  = self::request()->getParam('applicationID');
         $query  = self::db()->from('s_application a')
             ->leftJoin('s_application_member am ON am.appID = a.id')
@@ -38,7 +38,7 @@ class ReleaseController extends API
         return $query;
     }
 
-    public function checkPermission (\Favez\ORM\Entity\Entity $entity)
+    public function checkPermission (\Favez\ORM\Entity\Entity $entity, $action)
     {
         return Application::isMember($entity->appID);
     }
@@ -64,11 +64,6 @@ class ReleaseController extends API
         $entity->set('active', (int) $input['active'] ?? false);
         $entity->set('version', $input['version'] ?? '');
         $entity->set('description', $input['description'] ?? '');
-    }
-
-    public function afterSave (\Favez\ORM\Entity\Entity $entity, $isNew)
-    {
-
     }
 
 }

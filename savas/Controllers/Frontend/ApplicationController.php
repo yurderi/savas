@@ -1,10 +1,10 @@
 <?php
 
-namespace CMS\Controllers\Frontend;
+namespace ProVallo\Controllers\Frontend;
 
-use savas\Components\Controllers\API;
-use savas\Models\Savas\Application\Application;
-use savas\Models\Savas\Application\Member;
+use ProVallo\Plugins\Savas\Components\Controllers\API;
+use ProVallo\Plugins\Savas\Models\Savas\Application\Application;
+use ProVallo\Plugins\Savas\Models\Savas\Application\Member;
 
 class ApplicationController extends API
 {
@@ -18,7 +18,7 @@ class ApplicationController extends API
 
     public function getListQuery()
     {
-        $userID = self::auth()->userID();
+        $userID = self::auth()->getUserID();
         $query  = self::db()->from('s_application a')
             ->leftJoin('s_application_member am ON am.appID = a.id')
             ->where('am.userID', $userID)
@@ -35,7 +35,7 @@ class ApplicationController extends API
         return $query;
     }
 
-    public function checkPermission (\Favez\ORM\Entity\Entity $entity)
+    public function checkPermission (\Favez\ORM\Entity\Entity $entity, $action)
     {
         return Application::isMember($entity->id);
     }
@@ -60,7 +60,7 @@ class ApplicationController extends API
         if ($isNew)
         {
             $member = Member::create();
-            $member->userID = self::auth()->userID();
+            $member->userID = self::auth()->getUserID();
             $member->appID  = $entity->id;
             $member->save();
         }

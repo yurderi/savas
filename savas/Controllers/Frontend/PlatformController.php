@@ -1,9 +1,9 @@
 <?php
 
-namespace CMS\Controllers\Frontend;
+namespace ProVallo\Controllers\Frontend;
 
-use savas\Components\Controllers\API;
-use savas\Models\Savas\Platform;
+use ProVallo\Plugins\Savas\Components\Controllers\API;
+use ProVallo\Plugins\Savas\Models\Savas\Platform;
 
 class PlatformController extends API
 {
@@ -17,21 +17,21 @@ class PlatformController extends API
 
     public function getListQuery()
     {
-        $userID = self::auth()->userID();
+        $userID = self::auth()->getUserID();
         $query  = self::db()->from('s_platform')
             ->where('userID = -1 OR userID = ?', $userID);
 
         return $query;
     }
 
-    public function checkPermission (\Favez\ORM\Entity\Entity $entity)
+    public function checkPermission (\Favez\ORM\Entity\Entity $entity, $action)
     {
-        return (int) $entity->userID === self::auth()->userID();
+        return (int) $entity->userID === self::auth()->getUserID();
     }
 
     public function setDefaultValues(\Favez\ORM\Entity\Entity $entity)
     {
-        $entity->set('userID', self::auth()->userID());
+        $entity->set('userID', self::auth()->getUserID());
     }
 
     public function setValues (\Favez\ORM\Entity\Entity $entity, $input)

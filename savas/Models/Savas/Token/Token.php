@@ -1,6 +1,6 @@
 <?php
 
-namespace savas\Models\Savas\Token;
+namespace ProVallo\Plugins\Savas\Models\Savas\Token;
 
 use Favez\Mvc\ORM\Entity;
 

@@ -1,75 +1,80 @@
 <?php
 
-namespace CMS\Controllers\Frontend;
+namespace ProVallo\Controllers\Frontend;
 
-use CMS\Components\Controller;
-use CMS\Models\User\User;
+use ProVallo\Plugins\Backend\Models\User\User;
 use Validator\Validator;
 
-class UserController extends Controller
+/**
+ * Class UserController
+ *
+ * @package ProVallo\Controllers\Frontend
+ *
+ * @method \ProVallo\Plugins\Backend\Components\Auth auth()
+ */
+class UserController extends \ProVallo\Components\Controller
 {
-
+    
     public function loginAction ()
     {
-        $email    = self::request()->getParam('email');
+        $username = self::request()->getParam('username');
         $password = self::request()->getParam('password');
-        $register = self::request()->getParam('register');
-
-        if ($register === true)
+        
+        try
         {
-            return $this->register($email, $password);
-        }
-        else if (self::auth()->login($email, $password, false))
-        {
+            self::auth()->login($username, $password);
+            
             return self::json()->success();
         }
-
-        return self::json()->failure([
-            'error' => 'The email or password you entered is wrong.'
-        ]);
+        catch (\Exception $ex)
+        {
+            return self::json()->failure([
+                'error' => 'The email or password you entered is wrong.'
+            ]);
+        }
     }
     
     public function logoutAction ()
     {
-        self::auth()->clear();
+        self::auth()->logout();
         
         return self::json()->success();
     }
-
+    
     public function statusAction ()
     {
         return self::json()->success([
-            'loggedIn' => self::auth()->loggedIn(),
-            'config' => [
+            'loggedIn' => self::auth()->isLoggedIn(),
+            'config'   => [
                 'enableRegister' => true
             ]
         ]);
     }
-
+    
     protected function register ($email, $password)
     {
         Validator::addGlobalRule('unique_email', function ($fields, $value, $params) {
             return User::repository()->findOneBy(['email' => $value]) === false;
         });
-
+        
         $validator = new Validator();
         $validator->add('email', $email, 'required|email|unique_email', [
             'required'     => 'Please enter a valid email address',
             'email'        => 'Please enter a valid email address',
             'unique_email' => 'The entered email address is already in use'
         ]);
-
+        
         $validator->add('password', $password, 'required|min:8', [
             'required' => 'Please enter a password',
             'min'      => 'The password has a minimum length of 8 characters'
         ]);
-
+        
         $validator->validate();
-
+        
         if ($validator->passes())
         {
             /** @var User $user */
-            $user = User::create();
+            $user               = User::create();
             $user->email        = $email;
             $user->passwordHash = self::auth()->hash($password);
             $user->firstname    = '';
@@ -77,17 +82,26 @@ class UserController extends Controller
             $user->changed      = date('Y-m-d H:i:s');
             $user->created      = date('Y-m-d H:i:s');
             $user->groupID      = 1;
-
+            
             $user->save();
-
-            self::auth()->login($email, $password);
-
-            return self::json()->success();
+            
+            try
+            {
+                self::auth()->login($email, $password);
+                
+                return self::json()->success();
+            }
+            catch (\Exception $ex)
+            {
+                return self::json()->failure([
+                    'error' => 'The email or password you entered is wrong.'
+                ]);
+            }
         }
-
+        
         return self::json()->failure([
             'error' => $validator->errors()[0]
         ]);
     }
-
+    
 }

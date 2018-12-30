@@ -6,19 +6,16 @@
         <div class="form">
             <form @submit.prevent="submit">
                 <div class="form-item">
-                    <label for="email">
-                        email
+                    <label for="username">
+                        username
                     </label>
-                    <v-input type="email" id="email" v-model="form.email" :disabled="loggingIn"></v-input>
+                    <v-input type="text" id="username" v-model="form.username" :disabled="loggingIn"></v-input>
                 </div>
                 <div class="form-item">
                     <label for="password">
                         password
                     </label>
                     <v-input type="password" id="password" v-model="form.password" :disabled="loggingIn"></v-input>
-                </div>
-                <div class="form-item">
-                    <v-checkbox v-model="form.register" label="Create an account" :disabled="loggingIn"></v-checkbox>
                 </div>
                 <div class="form-buttons">
                     <v-button :spin="loggingIn">
@@ -38,7 +35,7 @@ export default {
     data: () => ({
         loggingIn: false,
         form: {
-            email: '',
+            username: '',
             password: '',
             register: false
         },
@@ -53,7 +50,7 @@ export default {
             me.loggingIn = true
             me.result.errorMessage = null
 
-            me.$http.post('user/login', me.form)
+            me.$http.post('frontend/user/login', me.form)
                 .then(response => response.data)
                 .then(response => {
                     if (response.success === true) {

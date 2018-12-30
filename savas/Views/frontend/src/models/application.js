@@ -16,9 +16,9 @@ export default {
         { name: 'feedbackCount', type: 'integer', default: 0 }
     ],
     proxy: {
-        list: 'application/list',
-        detail: 'application/detail',
-        save: 'application/save',
-        remove: 'application/remove'
+        list: 'frontend/application/list',
+        detail: 'frontend/application/detail',
+        save: 'frontend/application/save',
+        remove: 'frontend/application/remove'
     }
 }

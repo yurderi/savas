@@ -102,7 +102,7 @@ export default {
         },
         download (model) {
             let me = this
-            let url = me.$http.defaults.baseURL + '/file/download?id=' + model.id + '&filename=' + model.displayName
+            let url = me.$http.defaults.baseURL + 'frontend/file/download?id=' + model.id + '&filename=' + model.displayName
 
             window.open(url, '_blank')
         },
@@ -152,7 +152,7 @@ export default {
             setMessage(null)
             setProgress(0, 'Progressing...')
 
-            me.$http.post('file/save', data, config)
+            me.$http.post('frontend/file/save', data, config)
                 .then(response => response.data)
                 .then(response => {
                     if (response.success) {

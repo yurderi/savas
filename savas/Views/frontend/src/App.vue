@@ -16,7 +16,7 @@ export default {
     mounted () {
         let me = this
 
-        me.$http.get('user/status')
+        me.$http.get('frontend/user/status')
             .then(response => response.data)
             .then(response => {
                 if (response.loggedIn === true) {

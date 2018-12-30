@@ -9,9 +9,9 @@ export default {
         { name: 'changed', type: 'string' },
     ],
     proxy: {
-        list: 'token/list',
-        detail: 'token/detail',
-        save: 'token/save',
-        remove: 'token/remove'
+        list: 'frontend/token/list',
+        detail: 'frontend/token/detail',
+        save: 'frontend/token/save',
+        remove: 'frontend/token/remove'
     }
 }

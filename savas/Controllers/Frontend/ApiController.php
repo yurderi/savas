@@ -1,11 +1,11 @@
 <?php
 
-namespace CMS\Controllers\Frontend;
+namespace ProVallo\Controllers\Frontend;
 
-use CMS\Components\Controller;
-use savas\Models\Savas\Application\Application;
-use savas\Models\Savas\Application\File;
-use savas\Models\Savas\Token\Token;
+use ProVallo\Components\Controller;
+use ProVallo\Plugins\Savas\Models\Savas\Application\Application;
+use ProVallo\Plugins\Savas\Models\Savas\Application\File;
+use ProVallo\Plugins\Savas\Models\Savas\Token\Token;
 
 class ApiController extends Controller
 {

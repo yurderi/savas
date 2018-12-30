@@ -1,6 +1,6 @@
 <?php
 
-namespace savas\Models\Savas;
+namespace ProVallo\Plugins\Savas\Models\Savas;
 
 use Favez\Mvc\ORM\Entity;
 

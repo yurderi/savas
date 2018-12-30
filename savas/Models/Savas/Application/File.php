@@ -1,10 +1,10 @@
 <?php
 
-namespace savas\Models\Savas\Application;
+namespace ProVallo\Plugins\Savas\Models\Savas\Application;
 
 use Favez\Mvc\App;
 use Favez\Mvc\ORM\Entity;
-use savas\Models\Savas\Platform;
+use ProVallo\Plugins\Savas\Models\Savas\Platform;
 
 class File extends Entity
 {

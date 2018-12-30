@@ -1,27 +1,32 @@
 {
   "packageID": "pv_savas",
-  "label": "savas",
+  "name": "pv_savas",
+  "label": "Savas",
   "description": "A release system",
-  "version": "1.0.3",
   "author": "tyurderi",
   "website": "https://www.yurderi.de",
   "email": "tyurderi@yahoo.de",
-  "requires": {},
+  "version": "1.0.4",
+  
   "changelog": {
-    "1.0.4": [
-      "Add filename when downloading file directly"
-    ],
-    "1.0.3": [
-      "Fix orderBy in api/updates"
+    "1.0.0": [
+      "Initial release with basic functionality"
     ],
     "1.0.2": [
       "Fix typo in plugin description",
       "Fix validator app.unique.label",
       "Fix file/list query"
     ],
-    "1.0.1": [],
-    "1.0.0": [
-      "Initial release with basic functionality"
+    "1.0.3": [
+      "Fix orderBy in api/updates"
+    ],
+    "1.0.4": [
+      "Add filename when downloading file directly",
+      "Port pv_savas to ProVallo 4.0"
     ]
+  },
+  "package": {
+    "channel": "stable",
+    "platform": "provallo-plugin"
   }
 }

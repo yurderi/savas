@@ -5,9 +5,9 @@ export default {
         { name: 'label', type: 'string', filterable: true },
     ],
     proxy: {
-        list: 'platform/list',
-        detail: 'platform/detail',
-        save: 'platform/save',
-        remove: 'platform/remove'
+        list: 'frontend/platform/list',
+        detail: 'frontend/platform/detail',
+        save: 'frontend/platform/save',
+        remove: 'frontend/platform/remove'
     }
 }

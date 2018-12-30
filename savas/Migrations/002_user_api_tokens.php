@@ -1,10 +1,8 @@
 <?php
 
-namespace Savas\Migrations;
+namespace ProVallo\Plugins\Savas\Migrations;
 
-use CMS\Components\Database\Migration;
-
-class Migration_2 extends Migration
+class Migration_2 extends \ProVallo\Components\Database\Migration
 {
 
     public function up()

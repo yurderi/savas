@@ -1,9 +1,9 @@
 <?php
 
-namespace CMS\Controllers\Frontend;
+namespace ProVallo\Controllers\Frontend;
 
-use savas\Components\Controllers\API;
-use savas\Models\Savas\Token\Token;
+use ProVallo\Plugins\Savas\Components\Controllers\API;
+use ProVallo\Plugins\Savas\Models\Savas\Token\Token;
 
 class TokenController extends API
 {
@@ -17,21 +17,21 @@ class TokenController extends API
 
     public function getListQuery()
     {
-        $userID = self::auth()->userID();
+        $userID = self::auth()->getUserID();
         $query  = self::db()->from('s_api_token')
             ->where('userID = ?', $userID);
 
         return $query;
     }
 
-    public function checkPermission (\Favez\ORM\Entity\Entity $entity)
+    public function checkPermission (\Favez\ORM\Entity\Entity $entity, $action)
     {
-        return (int) $entity->userID === self::auth()->userID();
+        return (int) $entity->userID === self::auth()->getUserID();
     }
 
     public function setDefaultValues(\Favez\ORM\Entity\Entity $entity)
     {
-        $entity->set('userID', self::auth()->userID());
+        $entity->set('userID', self::auth()->getUserID());
         $entity->set('created', date('Y-m-d H:i:s'));
         $entity->set('token', md5(uniqid('savas_api_token')));
     }
