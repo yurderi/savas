@@ -30,34 +30,37 @@ class Bootstrap extends \ProVallo\Components\Plugin\Bootstrap
     
     public function execute ()
     {
-        $config = Core::di()->get('backend.config')->get($this);
-        $domainID = Core::di()->get('frontend.domain')->getAlternativeID();
-        
-        if ($config['domainID'] === $domainID)
+        if (Core::instance()->getApi() === CORE::API_WEB)
         {
-            require_once $this->getPath() . '/vendor/autoload.php';
-            
-            Core::events()->subscribe('core.route.register', function() {
-                $this->registerController('Frontend', 'Index');
-                $this->registerController('Frontend', 'User');
-                $this->registerController('Frontend', 'Application');
-                $this->registerController('Frontend', 'Channel');
-                $this->registerController('Frontend', 'Platform');
-                $this->registerController('Frontend', 'Release');
-                $this->registerController('Frontend', 'File');
-                $this->registerController('Frontend', 'Token');
+            $config = Core::di()->get('backend.config')->get($this);
+            $domainID = Core::di()->get('frontend.domain')->getAlternativeID();
     
-                Core::instance()->any('/api/v1/download/{filename}', function () {
-                    require_once __DIR__ . '/Controllers/Frontend/ApiController.php';
+            if ($config['domainID'] === $domainID)
+            {
+                require_once $this->getPath() . '/vendor/autoload.php';
         
-                    return Core::dispatcher()->dispatch('frontend:Api:download', []);
+                Core::events()->subscribe('core.route.register', function() {
+                    $this->registerController('Frontend', 'Index');
+                    $this->registerController('Frontend', 'User');
+                    $this->registerController('Frontend', 'Application');
+                    $this->registerController('Frontend', 'Channel');
+                    $this->registerController('Frontend', 'Platform');
+                    $this->registerController('Frontend', 'Release');
+                    $this->registerController('Frontend', 'File');
+                    $this->registerController('Frontend', 'Token');
+            
+                    Core::instance()->any('/api/v1/download/{filename}', function () {
+                        require_once __DIR__ . '/Controllers/Frontend/ApiController.php';
+                
+                        return Core::dispatcher()->dispatch('frontend:Api:download', []);
+                    });
+            
+                    $this->registerController('Frontend', 'Api', false);
+                    Core::instance()->any('/api/v1/[{action}]', 'frontend:Api:{action}');
+            
+                    Core::instance()->any('/', 'frontend:Index:index');
                 });
-    
-                $this->registerController('Frontend', 'Api', false);
-                Core::instance()->any('/api/v1/[{action}]', 'frontend:Api:{action}');
-    
-                Core::instance()->any('/', 'frontend:Index:index');
-            });
+            }
         }
     }
     
