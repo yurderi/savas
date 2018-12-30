@@ -37,7 +37,7 @@ module.exports = class API {
                             })
                             
                             console.log('Uploading file...')
-                            me.http.post('file/save', data, {
+                            me.http.post('frontend/file/save', data, {
                                 headers: data.getHeaders(),
                                 maxContentLength: Infinity
                             }).then(result => result.data).then(result => {
@@ -57,7 +57,7 @@ module.exports = class API {
     getPlatformByName (name) {
         let me = this
         
-        return me.http.get('platform/list').then(result => result.data).then(({data}) => {
+        return me.http.get('frontend/platform/list').then(result => result.data).then(({data}) => {
             for (var i = 0, platform = null; i < data.length, platform = data[ i ]; i++) {
                 if (platform.label === name) {
                     return platform
@@ -76,7 +76,7 @@ module.exports = class API {
             }
         }
         
-        return me.http.get('release/list', data).then(response => response.data).then(({data}) => {
+        return me.http.get('frontend/release/list', data).then(response => response.data).then(({data}) => {
             for (var i = 0, release = null; i < data.length, release = data[ i ]; i++) {
                 if (release.version === version && release.channel_label === channel) {
                     return release
@@ -100,7 +100,7 @@ module.exports = class API {
             }
         }
         
-        return me.http.post('release/save', data.params).then(response => response.data)
+        return me.http.post('frontend/release/save', data.params).then(response => response.data)
     }
     
     getReleases () {
@@ -112,7 +112,7 @@ module.exports = class API {
             }
         }
         
-        return me.http.get('release/list', data).then(response => response.data)
+        return me.http.get('frontend/release/list', data).then(response => response.data)
     }
     
 }
