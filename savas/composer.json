@@ -1,5 +1,6 @@
 {
     "require": {
-        "hoa/mime": "3.17.01.10"
+        "hoa/mime": "3.17.01.10",
+        "ext-json"
     }
 }

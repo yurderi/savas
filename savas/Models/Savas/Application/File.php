@@ -28,6 +28,8 @@ class File extends Entity
     public $extension;
 
     public $mimeType;
+    
+    public $systemRequirements;
 
     public $created;
 

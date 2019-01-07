@@ -13,10 +13,11 @@ class ApiController extends Controller
     /**
      * Path: /api/updates
      * Params:
-     *     id      - technical application name
-     *     channel - the technical channel name
-     *     version - the current installed version
-     *     token   - the public token (required if the app is private)
+     *     id       - technical application name
+     *     channel  - the technical channel name
+     *     platform - the technical platform name
+     *     version  - the current installed version
+     *     token    - the public token (required if the app is private)
      */
     public function updatesAction()
     {
@@ -88,7 +89,94 @@ class ApiController extends Controller
             ]);
         }
     }
-
+    
+    /**
+     * Path: /api/requirements
+     * Params:
+     *     id       - technical application name
+     *     channel  - the technical channel name
+     *     platform - the technical platform name
+     *     version  - the current installed version
+     *     token    - the public token (required if the app is private)
+     */
+    public function requirementsAction()
+    {
+        $id       = (string) self::request()->getParam('id');
+        $channel  = (string) self::request()->getParam('channel');
+        $platform = (string) self::request()->getParam('platform');
+        $version  = (string) self::request()->getParam('version');
+        $token    = (string) self::request()->getParam('token');
+        
+        $app    = Application::repository()->findOneBy(['label' => $id]);
+        
+        if ($app instanceof Application)
+        {
+            if ($app->visibility === 'private' && $token !== $app->publicKey)
+            {
+                return self::json()->failure([
+                    'code'    => 403,
+                    'message' => 'You are not permitted to access this application.'
+                ]);
+            }
+            
+            $releases = self::db()->from('s_application_release r')
+                ->join('s_channel c ON c.id = r.channelID')
+                ->where('r.appID', $app->id)
+                ->where('c.label', $channel)
+                ->where('r.active = 1')
+                ->orderBy('r.version DESC')
+                ->fetchAll();
+            
+            foreach ($releases as $i => &$release)
+            {
+                if (!version_compare($release['version'], $version, '>'))
+                {
+                    unset ($releases[$i]);
+                }
+    
+                $file = self::db()->from('s_application_release_file f')
+                    ->where('f.releaseID = ?', $release['id'])
+                    ->join('s_platform p ON p.id = f.platformID')
+                    ->where('p.label = ?', $platform)
+                    ->fetch();
+    
+                if (empty($file))
+                {
+                    return self::json()->failure([
+                        'code'    => 404,
+                        'message' => 'The associated release file does not exist.'
+                    ]);
+                }
+                
+                $release['filename']     = self::url('api/v1/download/' . $file['displayName'] . '?id=' . $file['filename']);
+                $release['releaseNotes'] = $release['description'];
+                $release['size']         = $file['size'];
+                $release['released']     = $release['created'];
+                $release['requirements'] = json_decode($file['systemRequirements'], true);
+                
+                unset ($release['id']);
+                unset ($release['appID']);
+                unset ($release['channelID']);
+                unset ($release['active']);
+                unset ($release['created']);
+                unset ($release['changed']);
+                unset ($release['description']);
+            }
+            
+            return self::json()->success([
+                'releases' => $releases
+            ]);
+        }
+        else
+        {
+            return self::json()->failure([
+                'code'    => 404,
+                'message' => 'The application you requested does not exist.'
+            ]);
+        }
+    }
+    
+    
     public function downloadAction()
     {
         $id   = (string) self::request()->getParam('id');

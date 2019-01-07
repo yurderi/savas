@@ -28,6 +28,13 @@ class Bootstrap extends \ProVallo\Components\Plugin\Bootstrap
         return true;
     }
     
+    public function update ($previousVersion)
+    {
+        $this->installDB();
+        
+        return true;
+    }
+    
     public function execute ()
     {
         if (Core::instance()->getApi() === CORE::API_WEB)

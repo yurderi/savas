@@ -45,10 +45,11 @@ class FileController extends API
     
     protected function setValues (Entity $entity, $input)
     {
-        $entity->releaseID   = $input['releaseID'];
-        $entity->platformID  = $input['platformID'];
-        $entity->displayName = $input['displayName'];
-        $entity->changed     = date('Y-m-d H:i:s');
+        $entity->releaseID          = $input['releaseID'];
+        $entity->platformID         = $input['platformID'];
+        $entity->displayName        = $input['displayName'];
+        $entity->systemRequirements = $input['systemRequirements'];
+        $entity->changed            = date('Y-m-d H:i:s');
         
         $files = self::request()->getUploadedFiles();
         

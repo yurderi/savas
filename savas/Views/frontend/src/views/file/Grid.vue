@@ -34,11 +34,20 @@
             <template slot="form" slot-scope="{ model }">
                 <div class="form-item">
                     <label for="platform">platform</label>
-                    <v-select :data="platforms" v-model="model.platformID"></v-select>
+                    <v-select :data="platforms" v-model="model.platformID" id="platform"></v-select>
                 </div>
                 <div class="form-item">
-                    <label for="file">file</label>
+                    <label for="file">
+                        filename
+                        <small>
+                            (click the button on the right to upload a new file)
+                        </small>
+                    </label>
                     <v-file id="file" v-model="model.displayName" ref="file"></v-file>
+                </div>
+                <div class="form-item">
+                    <label>system requirements</label>
+                    <v-list v-model="model.systemRequirements" :unique="true"></v-list>
                 </div>
             </template>
         </v-modal-form>
@@ -52,14 +61,14 @@ export default {
     props: {
         application: {
             required: true,
-            type: Object,
+            type: Object
         },
         release: {
             required: true,
             type: Object
         }
     },
-    data() {
+    data () {
         return {
             bytes,
             gridConfig: {
@@ -80,103 +89,110 @@ export default {
         }
     },
     computed: {
-        $form() {
+        $form () {
             return this.$refs.form
         },
-        $grid() {
+        $grid () {
             return this.$refs.grid
         },
-        $platform() {
+        $platform () {
             return this.$models.platform
         },
-        $model() {
+        $model () {
             return this.$models.file
         }
     },
     methods: {
-        create() {
+        create () {
             let me = this
-
+            
             me.$form.startEdit()
             me.$form.editingModel.releaseID = me.release.id
         },
         download (model) {
             let me = this
             let url = me.$http.defaults.baseURL + 'frontend/file/download?id=' + model.id + '&filename=' + model.displayName
-
+            
             window.open(url, '_blank')
         },
-        edit(model) {
+        edit (model) {
             let me = this
-
+            
+            model.systemRequirements = JSON.parse(model.systemRequirements) || []
+            
             me.$form.startEdit(model)
         },
-        remove(model) {
+        remove (model) {
             let me = this
-
-            me.$models.file.remove(model)
-                .then(() => {
-                    me.$grid.load()
-                })
+            
+            me.$models.file.remove(model).then(() => {
+                me.$grid.load()
+            })
         },
-        load(refreshGrid) {
+        load (refreshGrid) {
             let me = this
-
+            
             if (refreshGrid) {
                 me.$grid.load()
             } else {
                 me.$platform.list().then(platforms => me.platforms = platforms)
             }
         },
-        submit ({ setLoading, setMessage, setProgress }) {
+        submit ({setLoading, setMessage, setProgress}) {
             let me = this
             let $form = me.$form
             let model = $form.editingModel
             let data = new FormData()
             let config = {
-                onUploadProgress: function(progressEvent) {
-                    let percentCompleted = Math.round( (progressEvent.loaded * 100) / progressEvent.total );
-
+                onUploadProgress: function (progressEvent) {
+                    let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+                    
                     setProgress(percentCompleted, 'Progressing... ' + percentCompleted + '%')
                 }
             }
-
+            
             for (let key in model) {
                 if (model.hasOwnProperty(key)) {
-                    data.append(key, model[key])
+                    let value = model[ key ]
+                    
+                    switch (key) {
+                        case 'systemRequirements':
+                            value = JSON.stringify(model.systemRequirements)
+                            break
+                        default:
+                            value = model[ key ]
+                    }
+                    
+                    data.append(key, value)
                 }
             }
-
-            data.append('file', me.$refs.file.$refs.fileInput.files[0])
-
+            
+            data.append('file', me.$refs.file.$refs.fileInput.files[ 0 ])
+            
             setMessage(null)
             setProgress(0, 'Progressing...')
-
-            me.$http.post('frontend/file/save', data, config)
-                .then(response => response.data)
-                .then(response => {
-                    if (response.success) {
-                        $form.$emit('save')
-                        $form.editingModel = null
-                    } else {
-                        throw response.messages.join('<br />')
-                    }
-                })
-                .catch(error => {
-                    if (error instanceof Error) {
-                        setMessage('error', error.message)
-                    } else {
-                        setMessage('error', error)
-                    }
-                })
-                .finally(() => {
-                    setLoading(false)
-                    setProgress(null)
-                })
+            
+            me.$http.post('frontend/file/save', data, config).then(response => response.data).then(response => {
+                if (response.success) {
+                    $form.$emit('save')
+                    $form.editingModel = null
+                } else {
+                    throw response.messages.join('<br />')
+                }
+            }).catch(error => {
+                if (error instanceof Error) {
+                    setMessage('error', error.message)
+                } else {
+                    setMessage('error', error)
+                }
+            }).finally(() => {
+                setLoading(false)
+                setProgress(null)
+            })
         },
         platform (id) {
             let me = this
-
+            
             return me.platforms.find(platform => platform.id === id) || me.$platform.create()
         }
     }

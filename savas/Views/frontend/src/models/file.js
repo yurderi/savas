@@ -8,6 +8,7 @@ export default {
         { name: 'size', type: 'integer' },
         { name: 'extension', type: 'string' },
         { name: 'mimeType', type: 'string' },
+        { name: 'systemRequirements', type: 'string' },
         { name: 'created', type: 'string' },
         { name: 'changed', type: 'string' }
     ],

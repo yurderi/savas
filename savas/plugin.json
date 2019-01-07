@@ -6,8 +6,7 @@
   "author": "tyurderi",
   "website": "https://www.yurderi.de",
   "email": "tyurderi@yahoo.de",
-  "version": "1.0.5",
-  
+  "version": "1.0.6",
   "changelog": {
     "1.0.0": [
       "Initial release with basic functionality"
@@ -26,6 +25,11 @@
     ],
     "1.0.5": [
       "Check for api"
+    ],
+    "1.0.6": [
+      "Fix config/index.js for development",
+      "Add system requirements for files",
+      "Add /api/v1/requirements action"
     ]
   },
   "package": {
