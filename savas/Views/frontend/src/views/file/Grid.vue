@@ -118,7 +118,9 @@ export default {
         edit (model) {
             let me = this
             
-            model.systemRequirements = JSON.parse(model.systemRequirements) || []
+            if (typeof model.systemRequirements === 'string') {
+                model.systemRequirements = JSON.parse(model.systemRequirements) || []
+            }
             
             me.$form.startEdit(model)
         },
