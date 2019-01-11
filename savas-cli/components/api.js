@@ -35,6 +35,8 @@ module.exports = class API {
                             data.append('file', file, {
                                 filename: path.basename(filename)
                             })
+
+                            data.append('systemRequirements', '');
                             
                             console.log('Uploading file...')
                             me.http.post('frontend/file/save', data, {
