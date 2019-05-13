@@ -1,7 +1,13 @@
 const savas = require('./index')
 
 let app = savas.instance({
+    host: 'store.yurderi.de',
+    ssl: true,
 
+    id: 'pv_savas',
+    channel: 'stable',
+    platform: 'provallo-plugin',
+    version: '1.0.5'
 })
 
 app.getUpdate().then(update => {
