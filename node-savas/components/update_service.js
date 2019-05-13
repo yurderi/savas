@@ -1,14 +1,25 @@
 const axios = require('axios')
 const fs = require('fs')
+const _ = require('lodash')
 
 module.exports = class UpdateService {
 
     constructor (settings) {
         let me = this
 
-        me.opts = settings
+        me.defaultConfig = {
+            host: '',
+            ssl: false,
+
+            id: null,
+            channel: null,
+            platform: null,
+            version: null
+        }
+
+        me.opts = _.extend(me.defaultConfig, settings)
         me.http = axios.create({
-            baseURL: me.opts.host + '/savas/api/'
+            baseURL: (me.opts.ssl ? 'https://' : 'http://') + me.opts.host
         })
     }
 
@@ -22,7 +33,7 @@ module.exports = class UpdateService {
         }
 
         return new Promise ((resolve, reject) => {
-            me.http.get('updates', { params })
+            me.http.get('api/v1/updates', { params })
                 .then(response => response.data)
                 .then(response => {
                     if (response.isNewer) {
