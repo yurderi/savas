@@ -1,36 +1,36 @@
-const savas = require('../index')
-
-let app = savas.instance({
-    host: 'store.yurderi.de',
-    ssl: true,
-
-    id: 'git-merge-tool',
-    channel: 'stable',
-    platform: 'nodejs',
-    version: '0.0.1',
-
-    token: '1c71358c7305f28a1b34ae59fe74bdbf'
+process.on('unhandledRejection', error => {
+    throw error
 })
 
-app.getUpdate().then(update => {
-    app.download(update, {
-        destination: __dirname + '/pv.zip',
+const { version } = require('./package.json')
+const program = require('commander')
+const _ = require('lodash')
 
-        progress({ total, current, percentage }) {
-            console.log('%d/%d (%d%%)', current, total, percentage)
-        },
-        resolve({ filename }) {
-            console.log('Downloaded update file: %s', filename)
-        },
-        reject(error) {
-            console.log('There was an error while downloading the update')
+const { injectCommander } = require('../index')
+
+injectCommander(program, {
+    appName: 'node_savas_test2',
+    destination: __dirname,
+    appConfig: {
+        host: 'store.yurderi.de',
+        ssl: true,
+
+        id: 'git-merge-tool',
+        channel: 'stable',
+        platform: 'nodejs',
+        version: '0.2.0',
+
+        token: '1c71358c7305f28a1b34ae59fe74bdbf'
+    },
+    checkVersionOnStartup: true,
+    onVersionChecked () {
+        const cmd = program.parse(process.argv)
+
+        if (_.isEmpty(cmd.args) && process.argv.length === 2) {
+            program.help()
         }
-    })
-
-}).catch(error => {
-    if (error) {
-        console.log('There was an error while checking for updates')
-    } else {
-        console.log('No update available')
     }
 })
+
+program.name('node_savas_test2')
+program.version(version)

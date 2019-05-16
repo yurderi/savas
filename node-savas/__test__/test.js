@@ -1,13 +1,15 @@
-const savas = require('./index')
+const savas = require('../index')
 
 let app = savas.instance({
     host: 'store.yurderi.de',
     ssl: true,
 
-    id: 'pv_savas',
+    id: 'git-merge-tool',
     channel: 'stable',
-    platform: 'provallo-plugin',
-    version: '1.0.5'
+    platform: 'nodejs',
+    version: '0.0.1',
+
+    token: '1c71358c7305f28a1b34ae59fe74bdbf'
 })
 
 app.getUpdate().then(update => {

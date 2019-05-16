@@ -10,11 +10,11 @@ module.exports = class UpdateService {
         me.defaultConfig = {
             host: '',
             ssl: false,
-
             id: null,
             channel: null,
             platform: null,
-            version: null
+            version: null,
+            token: null
         }
 
         me.opts = _.extend(me.defaultConfig, settings)
@@ -29,7 +29,8 @@ module.exports = class UpdateService {
             id: me.opts.id,
             channel: me.opts.channel,
             platform: me.opts.platform,
-            version: me.opts.version
+            version: me.opts.version,
+            token: me.opts.token
         }
 
         return new Promise ((resolve, reject) => {
@@ -45,7 +46,6 @@ module.exports = class UpdateService {
                     }
                 })
                 .catch(error => {
-                    console.log(error)
                     reject(error)
                 })
         })
@@ -53,8 +53,34 @@ module.exports = class UpdateService {
 
     download (update, settings) {
         let me = this
+        let opts = _.extend({
+            /**
+             * The filename where the file should be downloaded to (required)
+             *
+             * @var {string}
+             */
+            destination: '',
+            /**
+             * The listener which gets called when the download finished (required)
+             *
+             * @var {function}
+             */
+            resolve: () => {},
+            /**
+             * The listener which gets called when the download fails (required)
+             *
+             * @var {function}
+             */
+            reject: () => {},
+            /**
+             * The listener which gets called on download-progress (optional)
+             *
+             * @var {function}
+             */
+            progress: () => {}
+        }, settings)
 
-        axios.get(update.filename, { responseType: 'stream' })
+        me.http.get(update.filename, { responseType: 'stream' })
             .then(response => {
                 let total = response.headers['content-length']
                 let received = 0
@@ -69,24 +95,26 @@ module.exports = class UpdateService {
                         if (_percentage !== percentage) {
                             percentage = _percentage
 
-                            settings.progress({
-                                total,
-                                current: received,
-                                percentage
-                            })
+                            if (typeof opts.progress === 'function') {
+                                opts.progress({
+                                    total,
+                                    current: received,
+                                    percentage
+                                })
+                            }
                         }
                     }
                 })
 
                 response.data.on('end', () => {
-                    settings.resolve({
-                        filename: settings.destination
+                    opts.resolve({
+                        filename: opts.destination
                     })
                 })
 
-                response.data.pipe(fs.createWriteStream(settings.destination))
+                response.data.pipe(fs.createWriteStream(opts.destination))
             })
-            .catch(settings.reject || function() {})
+            .catch(opts.reject || (() => {}))
     }
 
 }
