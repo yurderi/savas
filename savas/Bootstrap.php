@@ -10,7 +10,20 @@ class Bootstrap extends \ProVallo\Components\Plugin\Bootstrap
     public function install ()
     {
         $this->installDB();
+        $this->createConfig();
+        return true;
+    }
+    
+    public function update ($previousVersion)
+    {
+        $this->installDB();
+        $this->createConfig();
         
+        return true;
+    }
+    
+    protected function createConfig ()
+    {
         Core::di()->get('backend.config')->create($this, [
             'domainID' => [
                 'label'       => 'Domain',
@@ -22,17 +35,12 @@ class Bootstrap extends \ProVallo\Components\Plugin\Bootstrap
                     'valueField'   => 'id'
                 ],
                 'description' => 'On which domain should the store be available?'
+            ],
+            'search_api' => [
+                'label' => 'Enable Search API',
+                'type'  => 'checkbox'
             ]
         ]);
-        
-        return true;
-    }
-    
-    public function update ($previousVersion)
-    {
-        $this->installDB();
-        
-        return true;
     }
     
     public function execute ()
@@ -69,6 +77,14 @@ class Bootstrap extends \ProVallo\Components\Plugin\Bootstrap
                 });
             }
         }
+    }
+    
+    public static function getConfig ()
+    {
+        $plugin = Core::plugins()->get('Savas');
+        $config = Core::di()->get('backend.config')->get($plugin);
+        
+        return $config;
     }
     
 }
