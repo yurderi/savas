@@ -28,11 +28,11 @@ export default {
         breadcrumb() {
             return [
                 {
-                    label: 'applications',
+                    label: 'Applications',
                     route: { name: 'application-list' }
                 },
                 {
-                    label: 'settings',
+                    label: 'Settings',
                     route: { name: 'application-settings' }
                 }
             ]

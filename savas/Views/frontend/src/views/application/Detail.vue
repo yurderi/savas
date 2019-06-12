@@ -80,17 +80,17 @@ export default {
         breadcrumb() {
             return [
                 {
-                    label: 'applications',
+                    label: 'Applications',
                     route: { name: 'application-list' }
                 },
                 {
-                    label: 'create',
+                    label: 'Create',
                     route: { name: 'application-create' },
                     active: this.isNew
                 },
                 {
                     label: () => {
-                        return 'edit ' + this.model.label
+                        return 'Edit "' + this.model.label + '"'
                     },
                     route: { name: 'application-edit' },
                     active: !this.isNew && this.model !== null

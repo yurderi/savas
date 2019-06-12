@@ -1,38 +1,89 @@
 div.is--login {
-  margin: 50px auto;
-  width: 300px;
-  div.header {
-    .header-font;
-    padding: 5px 15px;
-  }
-  div.form {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .login-container {
+    width: 520px;
+    padding: 20px;
     background: #fff;
-    padding: 15px;
-    border-top: 5px solid @theme-color;
-    box-shadow: 2px 2px 16px rgba(0, 0, 0, 0.1);
-  }
-  .form-result {
-    display: inline-block;
-    background: #e74c3c;
-    padding: 10px;
-    margin: 10px 0 0 10px;
-    color: #fff;
-    position: relative;
-    font-size: 12px;
-    font-weight: 100;
-    &:after {
-      bottom: 100%;
-      left: 35px;
-      border: solid transparent;
-      content: " ";
-      height: 0;
-      width: 0;
-      position: absolute;
-      pointer-events: none;
-      border-color: rgba(231, 76, 60, 0);
-      border-bottom-color: #e74c3c;
-      border-width: 5px;
-      margin-left: -5px;
+    border-radius: 10px;
+    .login-header {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      .header-logo {
+        img {
+          width: 32px;
+          height: 32px;
+        }
+      }
+      .header-text {
+        flex: 1;
+        text-align: center;
+        font-size: 16px;
+      }
+    }
+    .login-form {
+      width: 400px;
+      margin: 0 auto;
+      div.form-item {
+        label {
+          text-align: center;
+          display: block;
+          margin: 25px 0 10px 0;
+          font-size: 16px;
+        }
+        .form-input {
+          input {
+            height: 40px;
+            background: #eee;
+            border: none;
+            box-shadow: none;
+            border-radius: 10px;
+            padding: 0 15px;
+            text-align: center;
+          }
+        }
+      }
+      div.form-buttons {
+        margin: 25px 0 5px 0;
+        display: flex;
+        justify-content: center;
+        button {
+          width: 122px;
+          height: 40px;
+          box-shadow: none;
+          border-radius: 10px;
+          cursor: pointer;
+          .text {
+            font-size: 16px;
+          }
+        }
+      }
+      div.form-result {
+        background: #e74c3c;
+        padding: 10px;
+        text-align: center;
+        border-radius: 10px;
+        color: #fff;
+        margin: 15px 0 0 0;
+        position: relative;
+        &:after {
+          bottom: 100%;
+          left: 50%;
+          border: solid transparent;
+          content: " ";
+          height: 0;
+          width: 0;
+          position: absolute;
+          pointer-events: none;
+          border-color: rgba(231, 76, 60, 0);
+          border-bottom-color: #e74c3c;
+          border-width: 10px;
+          margin-left: -10px;
+        }
+      }
     }
   }
 }

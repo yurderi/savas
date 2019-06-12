@@ -1,22 +1,43 @@
 .header-container {
   width: 100%;
-  height: 40px;
-  background: @theme-color;
-  border-bottom: 5px solid darken(@theme-color, 5);
+  height: 70px;
+  background: #fff;
   .header {
     display: flex;
     flex-direction: row;
     max-width: @container-width;
     margin: 0 auto;
-    .header-title {
-      color: #fff;
-      padding: 0 10px;
+    .header-logo {
+      width: 70px;
+      height: 70px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .header-space {
       flex: 1;
-      span {
-        .header-font;
+    }
+    .header-search {
+      display: flex;
+      align-items: center;
+      position: relative;
+      input {
+        height: 40px;
+        background: #eee;
+        border: none;
+        box-shadow: none;
+        border-radius: 40px;
+        padding: 0 40px 0 15px;
+        width: 200px;
+        transition: all 0.25s ease;
+        &:focus, &:active {
+          width: 300px;
+        }
       }
-      small {
-        font-size: 10px;
+      svg {
+        position: absolute;
+        right: 15px;
+        color: #666;
       }
     }
     ul.header-menu {
@@ -25,46 +46,71 @@
       padding: 5px;
       display: flex;
       flex-direction: row;
+      align-items: center;
       li {
         position: relative;
-        margin: 0 5px 0 0;
+        margin: 0 10px 0 0;
         &:last-child {
           margin: 0;
         }
         &:hover {
           > a {
-            border-radius: 3px 3px 0 0;
-            background: rgba(0, 0, 0, 0.1);
+            background: #eee;
           }
-          ul.sub-menu {
-            display: block;
+          &.has-children {
+            > a {
+              border-radius: 20px 20px 0 0;
+            }
+            ul.sub-menu {
+              display: block;
+            }
           }
         }
+        &.is-icon a {
+          padding: 0;
+          width: 40px;
+        }
         a {
-          color: #fff;
+          color: #333;
           text-decoration: none;
-          display: block;
-          padding: 5px 10px;
-          border-radius: 3px;
           font-weight: 100;
           outline: 0 none;
+          height: 40px;
+          padding: 0 25px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border-radius: 40px;
           &.router-link-exact-active  {
-            background: rgba(0, 0, 0, 0.1);
+            background: #eee;
           }
         }
         ul.sub-menu {
+          display: none;
           position: absolute;
           top: 100%;
           left: 0;
           list-style: none;
           margin: 0;
           padding: 5px;
-          background: darken(@theme-color, 5);
+          background: #eee;
           width: 100%;
-          border-radius: 0 0 3px 3px;
-          display: none;
+          border-radius: 0 0 20px 20px;
+          box-shadow: 0 15px 15px rgba(0, 0, 0, 0.1);
           li {
             width: 100%;
+            a {
+              border-radius: 5px;
+              height: 30px;
+            }
+            &:hover {
+              a {
+                background: #fff;
+              }
+            }
+            &:last-child a {
+              border-radius: 5px 5px 15px 15px;
+            }
           }
         }
       }
