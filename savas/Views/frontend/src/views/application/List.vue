@@ -3,45 +3,7 @@
         <v-header></v-header>
         <v-content>
             <v-breadcrumb :items="breadcrumb"></v-breadcrumb>
-
-            <v-grid ref="grid" :config="gridConfig" @create="create">
-                <div class="grid-item application" slot="item" slot-scope="{ model }">
-                    <div class="item-label">
-                        {{ model.label }}
-                    </div>
-                    <div class="item-description">
-                        {{ model.description }}
-                    </div>
-                    <div class="item-information">
-                        <div class="information-item">
-                            <div class="item-label">version</div>
-                            <div class="item-value">{{ model.currentVersion }}</div>
-                        </div>
-                        <div class="information-item">
-                            <div class="item-label">releases</div>
-                            <div class="item-value">{{ model.releaseCount }}</div>
-                        </div>
-                        <div class="information-item">
-                            <div class="item-label">downloads</div>
-                            <div class="item-value">{{ model.downloadCount }}</div>
-                        </div>
-                        <div class="information-item">
-                            <div class="item-label">feedback</div>
-                            <div class="item-value">{{ model.feedbackCount }}</div>
-                        </div>
-                    </div>
-                    <div class="item-actions">
-                        <a href="#" @click.prevent="edit(model)">
-                            <fa icon="pencil-alt"></fa>
-                            edit
-                        </a>
-                        <a href="#" @click.prevent="remove(model)">
-                            <fa icon="trash"></fa>
-                            remove
-                        </a>
-                    </div>
-                </div>
-            </v-grid>
+            <v-data-grid :config="gridConfig" @open="edit" @remove="remove"></v-data-grid>
         </v-content>
     </div>
 </template>
@@ -51,8 +13,39 @@ export default {
     data() {
         return {
             gridConfig: {
+                itemLimit: 10,
                 model: this.$models.application,
-                columns: 2,
+                columns: [
+                    {
+                        label: 'Name',
+                        key: 'label',
+                        width: '200px',
+                        main: true
+                    },
+                    {
+                        label: 'Current Version',
+                        key: 'currentVersion',
+                        width: '200px',
+                        render (row) {
+                            return row.currentVersion === 'null' ? '-' : row.currentVersion
+                        }
+                    },
+                    {
+                        label: 'Description',
+                        key: 'description',
+                        flex: 1,
+                        render (row) {
+                            return row.description || '-'
+                        }
+                    }
+                ],
+                actions: [
+                    {
+                        icon: 'trash',
+                        action: 'remove',
+                        color: 'red'
+                    }
+                ]
             }
         }
     },
@@ -90,13 +83,12 @@ export default {
                 }
             })
         },
-        remove(model) {
+        remove({ grid, row }) {
             let me = this
-
-            me.$model.remove(model)
-                .then(success => {
-                    me.$grid.load()
-                })
+            
+            me.$model.remove(row).then(() => {
+                grid.fetchData()
+            })
         }
     }
 }

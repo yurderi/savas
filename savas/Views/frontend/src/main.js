@@ -30,6 +30,8 @@ Vue.component('v-grid-header', require('@/modules/GridHeader.vue').default)
 Vue.component('v-grid', require('@/modules/Grid.vue').default)
 Vue.component('v-modal-form', require('@/modules/ModalForm.vue').default)
 
+Vue.component('v-data-grid', require('@/vendor/components/DataGrid.vue').default)
+
 window.app = new Vue({
     el: '#app',
     router,
