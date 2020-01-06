@@ -3,28 +3,27 @@
         <v-header></v-header>
         <v-content>
             <v-breadcrumb :items="breadcrumb"></v-breadcrumb>
-
-            <v-tab-menu>
-                <v-tab id="detail" label="Details">
+            
+            <div class="row">
+                <div class="column">
+                    sidebar menu
+                </div>
+                <div class="column flex">
                     <v-form v-if="model" @submit="save" :buttons="formButtons">
-                        <div class="form-item">
+                <div class="row">
+                    <div class="column flex">
+                         <div class="form-item">
                             <label for="label">
                                 Label
                             </label>
                             <v-input type="text" id="label" v-model="model.label" @validate="validateLabel"></v-input>
                         </div>
                         <div class="form-item">
-                            <label for="description">
-                                Description
-                            </label>
-                            <v-input type="textarea" id="description" v-model="model.description"></v-input>
-                        </div>
-                        <div class="form-item">
-                            <label for="description">
+                            <label for="visibility">
                                 Visibility
                             </label>
                             <v-select :data="visibilityValues" v-model="model.visibility"
-                                      displayField="value" valueField="id">
+                                      displayField="value" valueField="id" id="visibility">
                             </v-select>
                         </div>
                         <div class="form-item" v-if="!isNew">
@@ -39,12 +38,19 @@
                             </label>
                             <v-input type="text" id="privateKey" v-model="model.privateKey" readonly></v-input>
                         </div>
-                    </v-form>
-                </v-tab>
-                <v-tab id="releases" label="Releases">
-                    <v-releases-list v-if="model" :application="model"></v-releases-list>
-                </v-tab>
-            </v-tab-menu>
+                    </div>
+                    <div class="column flex">
+                        <div class="form-item">
+                            <label for="description">
+                                Description
+                            </label>
+                            <v-input type="textarea" id="description" v-model="model.description"></v-input>
+                        </div>
+                    </div>
+                </div>
+            </v-form>
+                </div>
+            </div>
         </v-content>
     </div>
 </template>
