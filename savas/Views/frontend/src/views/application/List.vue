@@ -3,7 +3,7 @@
         <v-header></v-header>
         <v-content>
             <v-breadcrumb :items="breadcrumb"></v-breadcrumb>
-            <v-data-grid :config="gridConfig" @open="edit" @remove="remove"></v-data-grid>
+            <v-data-grid :config="gridConfig" @add="create" @open="edit" @remove="remove"></v-data-grid>
         </v-content>
     </div>
 </template>

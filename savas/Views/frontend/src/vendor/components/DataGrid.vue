@@ -154,7 +154,7 @@ export default {
             me.opts.model.list().then(data => {
                 me.data = data
                 
-                me.pagination.pageCount = Math.ceil(me.data.length / me.opts.itemLimit)
+                me.pagination.pageCount = Math.max(1, Math.ceil(me.data.length / me.opts.itemLimit))
                 
                 if (me.pagination.current > me.pagination.pageCount) {
                     me.pagination.current = 1

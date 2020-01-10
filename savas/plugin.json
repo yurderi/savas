@@ -6,7 +6,7 @@
   "author": "tyurderi",
   "website": "https://www.yurderi.de",
   "email": "tyurderi@yahoo.de",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "changelog": {
     "1.0.0": [
       "Initial release with basic functionality"
@@ -37,6 +37,9 @@
     ],
     "1.2.0": [
       "Improved design"
+    ],
+    "1.2.1": [
+      "Certain small fixes"
     ]
   },
   "package": {
