@@ -1,202 +1,220 @@
 <template>
     <div>
-        <v-grid :config="gridConfig" @create="create" @load="load" ref="grid">
-            <div class="grid-item file" slot="item" slot-scope="{ model }" @create="create">
-                <div class="item-icon">
-                    <fa icon="file"></fa>
-                </div>
-                <div class="item-label">
-                    {{ model.displayName }}
-                </div>
-                <div class="item-meta">
-                    <div class="meta-item">
-                        {{ platform(model.platformID).label }}
-                    </div>
-                    <div class="meta-item">
-                        {{ bytes(model.size, { unitSeparator: ' ' }) }}
-                    </div>
-                </div>
-                <div class="item-actions">
-                    <a href="#" @click.prevent="download(model)">
-                        <fa icon="download"></fa>
-                    </a>
-                    <a href="#" @click.prevent="edit(model)">
-                        <fa icon="pencil-alt"></fa>
-                    </a>
-                    <a href="#" @click.prevent="remove(model)">
-                        <fa icon="trash"></fa>
-                    </a>
-                </div>
-            </div>
-        </v-grid>
+        <v-data-grid :config="gridConfig" @add="create" @open="edit" @remove="remove" @download="download" />
 
-        <v-modal-form :config="formConfig" ref="form" @save="load(true)">
-            <template slot="form" slot-scope="{ model }">
-                <div class="form-item">
-                    <label for="platform">platform</label>
-                    <v-select :data="platforms" v-model="model.platformID" id="platform"></v-select>
-                </div>
-                <div class="form-item">
-                    <label for="file">
-                        filename
-                        <small>
-                            (click the button on the right to upload a new file)
-                        </small>
+        <v-modal v-if="file" class="file-form">
+            <div class="modal-header">
+                <template v-if="file.id > 0">
+                    Edit file
+                </template>
+                <template v-else>
+                    Create file
+                </template>
+            </div>
+
+            <v-form @submit="submit" :buttons="formButtons" @abort="abort">
+                <div class="form-item platform">
+                    <label for="platform">
+                        Platform
                     </label>
-                    <v-file id="file" v-model="model.displayName" ref="file"></v-file>
+                    <v-select :data="platforms" v-model="file.platformID" id="platform"></v-select>
                 </div>
-                <div class="form-item">
-                    <label>system requirements</label>
-                    <v-list v-model="model.systemRequirements" :unique="true"></v-list>
+                <div class="row">
+                    <div class="form-item">
+                        <label for="file">
+                            File
+                        </label>
+                        <v-file id="file" v-model="file.displayName" ref="file"></v-file>
+                    </div>
+                    <div class="form-item">
+                        <label for="size">
+                            Size
+                        </label>
+                        <v-input type="text" :value="bytes(file.size)" readonly />
+                    </div>
                 </div>
-            </template>
-        </v-modal-form>
+                <v-requirements :file="file" />
+            </v-form>
+        </v-modal>
     </div>
 </template>
 
 <script>
-import bytes from 'bytes'
+    import bytes from 'bytes';
+    import VRequirements from './Requirements'
 
-export default {
-    props: {
-        application: {
-            required: true,
-            type: Object
+    export default {
+        components: {
+            VRequirements
         },
-        release: {
-            required: true,
-            type: Object
-        }
-    },
-    data () {
-        return {
-            bytes,
-            gridConfig: {
-                model: this.$models.file,
-                columns: 4,
-                fetchParams: () => ({
-                    releaseID: this.release.id
-                })
+        props: {
+            application: {
+                required: true,
+                type: Object
             },
-            formConfig: {
-                label: 'file',
-                model: this.$models.file,
-                override: {
-                    submit: this.submit
-                }
-            },
-            platforms: []
-        }
-    },
-    computed: {
-        $form () {
-            return this.$refs.form
-        },
-        $grid () {
-            return this.$refs.grid
-        },
-        $platform () {
-            return this.$models.platform
-        },
-        $model () {
-            return this.$models.file
-        }
-    },
-    methods: {
-        create () {
-            let me = this
-            
-            me.$form.startEdit()
-            me.$form.editingModel.releaseID = me.release.id
-        },
-        download (model) {
-            let me = this
-            let url = me.$http.defaults.baseURL + 'frontend/file/download?id=' + model.id + '&filename=' + model.displayName
-            
-            window.open(url, '_blank')
-        },
-        edit (model) {
-            let me = this
-            
-            if (typeof model.systemRequirements === 'string') {
-                model.systemRequirements = JSON.parse(model.systemRequirements) || []
-            }
-            
-            me.$form.startEdit(model)
-        },
-        remove (model) {
-            let me = this
-            
-            me.$models.file.remove(model).then(() => {
-                me.$grid.load()
-            })
-        },
-        load (refreshGrid) {
-            let me = this
-            
-            if (refreshGrid) {
-                me.$grid.load()
-            } else {
-                me.$platform.list().then(platforms => me.platforms = platforms)
+            release: {
+                required: true,
+                type: Object
             }
         },
-        submit ({setLoading, setMessage, setProgress}) {
-            let me = this
-            let $form = me.$form
-            let model = $form.editingModel
-            let data = new FormData()
-            let config = {
-                onUploadProgress: function (progressEvent) {
-                    let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
-                    
-                    setProgress(percentCompleted, 'Progressing... ' + percentCompleted + '%')
-                }
-            }
-            
-            for (let key in model) {
-                if (model.hasOwnProperty(key)) {
-                    let value = model[ key ]
-                    
-                    switch (key) {
-                        case 'systemRequirements':
-                            value = JSON.stringify(model.systemRequirements)
-                            break
-                        default:
-                            value = model[ key ]
+        data() {
+            return {
+                bytes,
+                gridConfig: {
+                    itemLimit: 10,
+                    model: this.$models.file,
+                    extraParams: {
+                        releaseID: this.release.id
+                    },
+                    columns: [
+                        {
+                            label: 'Filename',
+                            key: 'displayName',
+                            flex: 1,
+                            main: true
+                        },
+                        {
+                            label: 'Size',
+                            key: 'size',
+                            width: '100px',
+                            render(model) {
+                                return bytes(model.size, { unitSeparator: ' ' });
+                            }
+                        },
+                        {
+                            label: 'Platform',
+                            key: 'platformID',
+                            width: '150px',
+                            render: (model) => {
+                                return this.platform(model.platformID).label;
+                            }
+                        }
+                    ],
+                    actions: [
+                        {
+                            icon: 'download',
+                            action: 'download',
+                            color: 'black'
+                        },
+                        {
+                            icon: 'trash',
+                            action: 'remove',
+                            color: 'red'
+                        }
+                    ]
+                },
+                platforms: [],
+                file: null,
+                formButtons: [
+                    {
+                        label: 'Abort',
+                        name: 'abort',
+                        class: 'secondary'
+                    },
+                    {
+                        label: 'Submit',
+                        primary: true,
+                        name: 'submit'
                     }
-                    
-                    data.append(key, value)
-                }
-            }
-            
-            data.append('file', me.$refs.file.$refs.fileInput.files[ 0 ])
-            
-            setMessage(null)
-            setProgress(0, 'Progressing...')
-            
-            me.$http.post('frontend/file/save', data, config).then(response => response.data).then(response => {
-                if (response.success) {
-                    $form.$emit('save')
-                    $form.editingModel = null
-                } else {
-                    throw response.messages.join('<br />')
-                }
-            }).catch(error => {
-                if (error instanceof Error) {
-                    setMessage('error', error.message)
-                } else {
-                    setMessage('error', error)
-                }
-            }).finally(() => {
-                setLoading(false)
-                setProgress(null)
-            })
+                ]
+            };
         },
-        platform (id) {
-            let me = this
-            
-            return me.platforms.find(platform => platform.id === id) || me.$platform.create()
+        computed: {
+            $platform() {
+                return this.$models.platform;
+            },
+            $model() {
+                return this.$models.file;
+            }
+        },
+        mounted() {
+            var me = this;
+
+            me.$platform.list().then(platforms => me.platforms = platforms);
+        },
+        methods: {
+            create() {
+                let me = this;
+
+                me.file = me.$model.create({
+                    releaseID: me.release.id
+                });
+            },
+            download({ row: model }) {
+                let me  = this;
+                let url = me.$http.defaults.baseURL
+                    + 'frontend/file/download?id='
+                    + model.id
+                    + '&filename='
+                    + model.displayName;
+
+                window.open(url, '_blank');
+            },
+            edit(model) {
+                let me = this;
+
+                me.file = model;
+            },
+            remove({ grid, row }) {
+                let me = this;
+
+                me.$models.file.remove(row).then(() => {
+                    grid.fetchData();
+                });
+            },
+            submit({ setLoading, setMessage, setProgress }) {
+                let me     = this;
+                let data   = new FormData();
+                let config = {
+                    onUploadProgress: function(progressEvent) {
+                        let percentCompleted = Math.round((
+                            progressEvent.loaded * 100
+                        ) / progressEvent.total);
+
+                        setProgress(percentCompleted, 'Progressing... ' + percentCompleted + '%');
+                    }
+                };
+
+                data.append('id', me.file.id);
+                data.append('displayName', me.file.displayName);
+                data.append('releaseID', me.file.releaseID);
+                data.append('platformID', me.file.platformID);
+                data.append('file', me.$refs.file.$refs.fileInput.files[0]);
+
+                setMessage(null);
+                setProgress(0, 'Progressing...');
+
+                me.$http.post('frontend/file/save', data, config).then(response => response.data).then(response => {
+                    if (response.success) {
+                        me.file = null;
+                    } else {
+                        if (typeof response === 'object') {
+                            throw response.messages.join('<br />');
+                        }
+
+                        throw 'The file could not be saved.'
+                    }
+                }).catch(error => {
+                    if (error instanceof Error) {
+                        setMessage('error', error.message);
+                    } else {
+                        setMessage('error', error);
+                    }
+                }).finally(() => {
+                    setLoading(false);
+                    setProgress(null);
+                });
+            },
+            abort() {
+                let me = this;
+
+                me.file = null;
+            },
+            platform(id) {
+                let me = this;
+
+                return me.platforms.find(platform => platform.id === id) || me.$platform.create();
+            }
         }
-    }
-}
+    };
 </script>

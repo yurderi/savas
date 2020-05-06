@@ -12,7 +12,7 @@ module.exports = {
         assetsPublicPath: '/',
         proxyTable: {
             '/frontend': {
-                target: 'http://savas.test/',
+                target: 'http://savas.dev.localhost/',
                 changeOrigin: true
             }
         },

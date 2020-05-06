@@ -259,8 +259,7 @@ class ApiController extends Controller
                 $release['releaseNotes'] = $release['description'];
                 $release['size']         = $file['size'];
                 $release['released']     = $release['created'];
-                $release['requirements'] = json_decode($file['systemRequirements'], true);
-                
+
                 unset ($release['id']);
                 unset ($release['appID']);
                 unset ($release['channelID']);

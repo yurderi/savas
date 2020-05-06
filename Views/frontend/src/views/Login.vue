@@ -1,6 +1,6 @@
 <template>
     <div class="is--login">
-        
+
         <div class="login-container">
             <div class="login-header">
                 <div class="header-logo">
@@ -11,69 +11,67 @@
                 </div>
             </div>
             <div class="login-form">
-                <form @submit.prevent="submit">
+                <v-form @submit="submit" :buttons="form.buttons" message-position="bottom">
                     <div class="form-item">
                         <label for="username">
                             Username
                         </label>
-                        <v-input type="text" id="username" v-model="form.username" :disabled="loggingIn"></v-input>
+                        <v-input type="text" id="username" v-model="form.username"></v-input>
                     </div>
                     <div class="form-item">
                         <label for="password">
                             Password
                         </label>
-                        <v-input type="password" id="password" v-model="form.password" :disabled="loggingIn"></v-input>
+                        <v-input type="password" id="password" v-model="form.password"></v-input>
                     </div>
-                    <div class="form-buttons">
-                        <v-button :spin="loggingIn">
-                            Submit
-                        </v-button>
-                    </div>
-                    <div class="form-result" v-if="result.errorMessage">
-                        {{ result.errorMessage }}
-                    </div>
-                </form>
+                </v-form>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-export default {
-    data: () => ({
-        loggingIn: false,
-        form: {
-            username: '',
-            password: '',
-            register: false
-        },
-        result: {
-            errorMessage: null
-        }
-    }),
-    methods: {
-        submit () {
-            let me = this
+    export default {
+        data: () => (
+            {
+                form: {
+                    username: '',
+                    password: '',
+                    register: false,
 
-            me.loggingIn = true
-            me.result.errorMessage = null
-            
-            me.$http.post('frontend/user/login', me.form)
-                .then(response => response.data)
-                .then(response => {
-                    if (response.success === true) {
-                        me.$router.push('/')
-                    } else {
-                        me.result.errorMessage = response.error
-                    }
-                })
-                .catch(error => {
-                    console.log(error)
-                })
-                .finally(() => {
-                    me.loggingIn = false
-                })
+                    buttons: [
+                        {
+                            label: 'Submit',
+                            primary: true,
+                            name: 'submit'
+                        }
+                    ]
+                }
+            }
+        ),
+        methods: {
+            submit({ setMessage, setLoading, setProgress }) {
+                let me = this;
+
+                setLoading(true);
+
+                me.$http.post('frontend/user/login', me.form)
+                    .then(response => response.data)
+                    .then(response => {
+                        if (response.success === true) {
+                            me.$router.push('/');
+                        } else {
+                            setMessage('error', response.error);
+                        }
+                    })
+                    .catch(error => {
+                        setMessage('error', error);
+                        console.log(error);
+                    })
+                    .finally(() => {
+                        setLoading(false);
+                    });
+            }
         }
-    }
-}
+    };
 </script>

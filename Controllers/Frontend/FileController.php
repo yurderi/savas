@@ -48,7 +48,6 @@ class FileController extends API
         $entity->releaseID          = $input['releaseID'];
         $entity->platformID         = $input['platformID'];
         $entity->displayName        = $input['displayName'];
-        $entity->systemRequirements = $input['systemRequirements'];
         $entity->changed            = date('Y-m-d H:i:s');
         
         $files = self::request()->getUploadedFiles();

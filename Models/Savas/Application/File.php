@@ -28,8 +28,6 @@ class File extends Entity
     public $extension;
 
     public $mimeType;
-    
-    public $systemRequirements;
 
     public $created;
 
@@ -39,6 +37,7 @@ class File extends Entity
     {
         $this->belongsTo(Release::class, 'releaseID')->setName('release');
         $this->hasOne(Platform::class, 'platformID')->setName('platform');
+        $this->hasMany(Requirement::class, 'fileID')->setName('requirements');
     }
 
     public function onRemove()
