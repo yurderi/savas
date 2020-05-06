@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-data-grid :config="gridConfig" @add="create" @open="edit" @remove="remove" @download="download" />
+        <v-data-grid :config="gridConfig" ref="grid" @add="create" @open="edit" @remove="remove" @download="download" />
 
         <v-modal v-if="file" class="file-form">
             <div class="modal-header">
@@ -125,6 +125,9 @@
             },
             $model() {
                 return this.$models.file;
+            },
+            $grid() {
+                return this.$refs.grid
             }
         },
         mounted() {
@@ -136,9 +139,8 @@
             create() {
                 let me = this;
 
-                me.file = me.$model.create({
-                    releaseID: me.release.id
-                });
+                me.file = me.$model.create();
+                me.file.releaseID = me.release.id;
             },
             download({ row: model }) {
                 let me  = this;
@@ -187,6 +189,7 @@
                 me.$http.post('frontend/file/save', data, config).then(response => response.data).then(response => {
                     if (response.success) {
                         me.file = null;
+                        me.$grid.fetchData();
                     } else {
                         if (typeof response === 'object') {
                             throw response.messages.join('<br />');
