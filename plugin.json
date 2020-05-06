@@ -6,7 +6,7 @@
   "author": "tyurderi",
   "website": "https://www.yurderi.de",
   "email": "tyurderi@yahoo.de",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "changelog": {
     "1.0.0": [
       "Initial release with basic functionality"
@@ -44,6 +44,9 @@
     "1.3.0": [
       "Continue design",
       "Cleanup"
+    ],
+    "1.3.1": [
+      "fix(core): A file could not be uploaded due missing release.id"
     ]
   },
   "package": {
